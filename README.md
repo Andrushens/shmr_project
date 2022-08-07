@@ -1,16 +1,16 @@
-# shmr
+# Done App - shmr project
 
-A new Flutter project.
+## Apk download [link](https://drive.google.com/drive/u/0/folders/1K3El0Ym7FXpFw6Rj-clYfzQn7zhFdvjd)
 
-## Getting Started
+## Look-throw video [link](https://drive.google.com/drive/u/0/folders/1K3El0Ym7FXpFw6Rj-clYfzQn7zhFdvjd)
 
-This project is a starting point for a Flutter application.
+## Firebase console - [link](https://console.firebase.google.com/u/1/project/shmr-9beb9)
 
-A few resources to get you started if this is your first Flutter project:
+## Requirements
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 1 Design: 2 screens, task-swipe, display all/uncomplete tasks, slivers
+- 2 State Management: implement bloc(cubit) for HomePage
+- 3 Data-stuff: imeplement remote & local flows with data
+- 4 Firebase: RemoteConfig(importance_color) + Crashlytics
+- 5 Other: app icon, logging, intl, freezed, interfaces to work with data (RemoteSource, LocalSource, TasksRepository)
+- Todo: refactor state management (TaskPage is now implemented with stf widget), offline-first, sharedPreferences(save [displayCompleteTasks] value), handling errors, Navigation 2.0, refactor theme(+night theme), DI, testing, depplinks, flavors, CI(for github), analytics
