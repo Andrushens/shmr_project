@@ -13,4 +13,4 @@
 - 3 Data-stuff: imeplement remote & local flows with data
 - 4 Firebase: RemoteConfig(importance_color) + Crashlytics
 - 5 Other: app icon, logging, intl, freezed, interfaces to work with data (RemoteSource, LocalSource, TasksRepository)
-- Todo: refactor state management (TaskPage is now implemented with stf widget), offline-first, sharedPreferences(save [displayCompleteTasks] value), handling errors, Navigation 2.0, refactor theme(+night theme), DI, testing, depplinks, flavors, CI(for github), analytics
+- Todo: refactor state management (move logic to cubit, remove blocbuilder from sliverappbar, etc. + TaskPage is now implemented with stf widget), offline-first, sharedPreferences(save [displayCompleteTasks] value), handling errors, Navigation 2.0, refactor theme(+night theme), DI, testing, depplinks, flavors, CI(for github), analytics
