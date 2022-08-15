@@ -13,10 +13,9 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      var tasks = await DatabaseProvider.fetchTasks();
+      final tasks = await DatabaseProvider.fetchTasks();
       return tasks;
     } catch (e) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -26,7 +25,6 @@ class LocalSourceImpl implements LocalSource {
     try {
       await DatabaseProvider.addTask(task);
     } catch (e) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -36,7 +34,6 @@ class LocalSourceImpl implements LocalSource {
     try {
       await DatabaseProvider.deleteTask(id);
     } catch (e) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -46,16 +43,15 @@ class LocalSourceImpl implements LocalSource {
     try {
       await DatabaseProvider.updateTask(task);
     } catch (e) {
-      //TODO handle exception
       rethrow;
     }
   }
 
+  @override
   Future<void> addTasksList(List<Task> tasks) async {
     try {
       await DatabaseProvider.addTasksList(tasks);
     } catch (e) {
-      //TODO handle exception
       rethrow;
     }
   }

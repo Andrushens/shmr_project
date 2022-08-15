@@ -17,7 +17,7 @@ class DateFormatter {
   };
 
   static String formatDate(DateTime date) {
-    var formattedDate = '${date.day} ${months[date.month]} ${date.year}';
+    final formattedDate = '${date.day} ${months[date.month]} ${date.year}';
     return formattedDate;
   }
 }

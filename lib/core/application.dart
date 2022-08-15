@@ -8,14 +8,14 @@ import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/home_page.dart';
 
 class MyApp extends StatelessWidget {
-  final TasksRepository tasksRepository;
-  final Color importanceColor;
-
   const MyApp({
     required this.importanceColor,
     required this.tasksRepository,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final TasksRepository tasksRepository;
+  final Color importanceColor;
 
   @override
   Widget build(BuildContext context) {

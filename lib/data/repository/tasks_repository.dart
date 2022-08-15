@@ -6,81 +6,74 @@ import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/failure.dart';
 
 abstract class TasksRepository {
-  Future<Either<Failure, List<Task>>> fetchTasks();
-  Future<Either<Failure, bool>> addTask(Task task);
-  Future<Either<Failure, bool>> deleteTask(String id);
-  Future<Either<Failure, bool>> updateTask(Task task);
+  Future<Either<ServerException, List<Task>>> fetchTasks();
+  Future<Either<ServerException, bool>> addTask(Task task);
+  Future<Either<ServerException, bool>> deleteTask(String id);
+  Future<Either<ServerException, bool>> updateTask(Task task);
 }
 
 class TasksRepositoryImpl implements TasksRepository {
-  final RemoteSource remoteSource;
-  final LocalSource localSource;
-
   const TasksRepositoryImpl({
     required this.remoteSource,
     required this.localSource,
   });
 
+  final RemoteSource remoteSource;
+  final LocalSource localSource;
+
   @override
-  Future<Either<Failure, List<Task>>> fetchTasks() async {
+  Future<Either<ServerException, List<Task>>> fetchTasks() async {
     try {
-      var tasks = await remoteSource.fetchTasks();
+      final tasks = await remoteSource.fetchTasks();
       await localSource.addTasksList(tasks);
       return Right(tasks);
     } catch (e) {
       logger.w('failed to fetch tasks remote: $e');
     }
     try {
-      var tasks = await localSource.fetchTasks();
+      final tasks = await localSource.fetchTasks();
       return Right(tasks);
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerException());
     }
   }
 
   @override
-  Future<Either<Failure, bool>> addTask(Task task) async {
+  Future<Either<ServerException, bool>> addTask(Task task) async {
     try {
       await localSource.addTask(task);
       await remoteSource.addTask(task);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerException());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerException());
     }
   }
 
   @override
-  Future<Either<Failure, bool>> deleteTask(String id) async {
+  Future<Either<ServerException, bool>> deleteTask(String id) async {
     try {
       await localSource.deleteTask(id);
       await remoteSource.deleteTask(id);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerException());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerException());
     }
   }
 
   @override
-  Future<Either<Failure, bool>> updateTask(Task task) async {
+  Future<Either<ServerException, bool>> updateTask(Task task) async {
     try {
       await localSource.updateTask(task);
       await remoteSource.updateTask(task);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerException());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerException());
     }
   }
 }

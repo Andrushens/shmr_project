@@ -3,26 +3,27 @@ import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/utils/const.dart';
 
 class CustomFlexibleSpace extends StatelessWidget {
-  final double maxHeight = 150.0;
-  final double minHeight = 50.0;
-  final bool displayCompleted;
-  final int completedAmount;
-  final Function(bool value) onDisplayCompletedUpdate;
-
   const CustomFlexibleSpace({
     required this.displayCompleted,
     required this.completedAmount,
     required this.onDisplayCompletedUpdate,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  int get maxHeight => 150;
+  double get minHeight => 50;
+  final bool displayCompleted;
+  final int completedAmount;
+  final void Function({required bool displayCompleted})
+      onDisplayCompletedUpdate;
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     return LayoutBuilder(
       builder: (context, constraints) {
-        var expandRatio = _calculateExpandRatio(constraints);
-        var animation = AlwaysStoppedAnimation(expandRatio);
+        final expandRatio = _calculateExpandRatio(constraints);
+        final animation = AlwaysStoppedAnimation(expandRatio);
         return Stack(
           children: [
             Padding(
@@ -53,8 +54,8 @@ class CustomFlexibleSpace extends StatelessWidget {
                         ).evaluate(animation),
                         margin: EdgeInsets.only(
                           left: Tween<double>(
-                            begin: 16.0,
-                            end: 36.0,
+                            begin: 16,
+                            end: 36,
                           ).evaluate(animation),
                         ),
                         child: Text(
@@ -79,8 +80,8 @@ class CustomFlexibleSpace extends StatelessWidget {
                       ).evaluate(animation),
                       margin: EdgeInsets.only(
                         left: Tween<double>(
-                          begin: 16.0,
-                          end: 36.0,
+                          begin: 16,
+                          end: 36,
                         ).evaluate(animation),
                       ),
                       child: Opacity(
@@ -101,11 +102,13 @@ class CustomFlexibleSpace extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 14.0),
+              padding: const EdgeInsets.only(right: 14),
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: IconButton(
-                  onPressed: () => onDisplayCompletedUpdate(!displayCompleted),
+                  onPressed: () => onDisplayCompletedUpdate(
+                    displayCompleted: !displayCompleted,
+                  ),
                   icon: Image.asset(
                     displayCompleted
                         ? 'assets/images/visibility.png'
@@ -123,7 +126,7 @@ class CustomFlexibleSpace extends StatelessWidget {
   }
 
   double _calculateExpandRatio(BoxConstraints constraints) {
-    var expandRatio =
+    final expandRatio =
         (constraints.biggest.height - minHeight) / (maxHeight - minHeight);
     return expandRatio;
   }

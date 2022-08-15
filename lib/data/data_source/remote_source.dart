@@ -12,8 +12,6 @@ abstract class RemoteSource {
 }
 
 class RemoteSourceImpl implements RemoteSource {
-  late final Dio dio;
-
   RemoteSourceImpl() {
     dio = Dio(
       BaseOptions(
@@ -28,25 +26,26 @@ class RemoteSourceImpl implements RemoteSource {
     )..interceptors.add(LoggingInterceptor());
   }
 
+  late final Dio dio;
+
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      var response = await dio.get('list');
-      var data = response.data;
+      final response = await dio.get('list');
+      final data = response.data as Map<String, dynamic>;
       if (response.statusCode == 200 && data['status'] == 'ok') {
-        var revision = data['revision'];
+        final revision = data['revision'];
         logger.i('revision: $revision');
         dio.options.headers['X-Last-Known-Revision'] = revision;
-        var jsonList = data['list'] as List;
-        var tasks = <Task>[];
-        for (var json in jsonList) {
-          tasks.add(Task.fromJson(json));
+        final jsonList = data['list'] as List<dynamic>;
+        final tasks = <Task>[];
+        for (final json in jsonList) {
+          tasks.add(Task.fromJson(json as Map<String, Object?>));
         }
         return tasks;
       }
-      throw Failure();
+      throw ServerException();
     } catch (error) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -54,20 +53,20 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> addTask(Task task) async {
     try {
-      var response = await dio.post(
+      final response = await dio.post(
         'list',
         data: {
           'element': task.toJson(),
         },
       );
-      if (response.data['status'] == 'ok') {
-        var revision = response.data['revision'];
+      final data = response.data as Map<String, dynamic>;
+      if (data['status'] == 'ok') {
+        final revision = data['revision'];
         dio.options.headers['X-Last-Known-Revision'] = revision;
       } else {
-        throw Failure();
+        throw ServerException();
       }
     } catch (error) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -75,17 +74,17 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> deleteTask(String id) async {
     try {
-      var response = await dio.delete(
+      final response = await dio.delete(
         'list/$id',
       );
-      if (response.data['status'] == 'ok') {
-        var revision = response.data['revision'];
+      final data = response.data as Map<String, dynamic>;
+      if (data['status'] == 'ok') {
+        final revision = data['revision'];
         dio.options.headers['X-Last-Known-Revision'] = revision;
       } else {
-        throw Failure();
+        throw ServerException();
       }
     } catch (error) {
-      //TODO handle exception
       rethrow;
     }
   }
@@ -93,20 +92,20 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> updateTask(Task task) async {
     try {
-      var response = await dio.put(
+      final response = await dio.put(
         'list/${task.id}',
         data: {
           'element': task.toJson(),
         },
       );
-      if (response.data['status'] == 'ok') {
-        var revision = response.data['revision'];
+      final data = response.data as Map<String, dynamic>;
+      if (data['status'] == 'ok') {
+        final revision = data['revision'];
         dio.options.headers['X-Last-Known-Revision'] = revision;
       } else {
-        throw Failure();
+        throw ServerException();
       }
     } catch (error) {
-      //TODO handle exception
       rethrow;
     }
   }

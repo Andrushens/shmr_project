@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_flexible_space.dart';
 import 'package:shmr/view/home/widgets/home_task_text_field.dart';
-import 'package:shmr/view/home/widgets/task_tile.dart';
 import 'package:shmr/view/home/widgets/tasks_list_view.dart';
 import 'package:shmr/view/task/task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -51,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
                     SliverAppBar(
-                      expandedHeight: 150.0,
+                      expandedHeight: 150,
                       pinned: true,
                       backgroundColor: Const.kBackPrimary,
                       flexibleSpace: CustomFlexibleSpace(
@@ -63,43 +61,43 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SliverToBoxAdapter(
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                               offset: const Offset(-1, 0),
                               color: Colors.black.withOpacity(.2),
-                              blurRadius: 1.0,
+                              blurRadius: 1,
                             ),
                             BoxShadow(
                               offset: const Offset(1, 0),
                               color: Colors.black.withOpacity(.2),
-                              blurRadius: 1.0,
+                              blurRadius: 1,
                             ),
                             BoxShadow(
                               offset: const Offset(0, 1),
                               color: Colors.black.withOpacity(.2),
-                              blurRadius: 1.0,
+                              blurRadius: 1,
                             ),
                             const BoxShadow(
                               offset: Offset(0, -1),
                               color: Colors.white,
-                              blurRadius: 1.0,
+                              blurRadius: 1,
                             ),
                           ],
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10),
                           child: Column(
                             children: [
-                              TasksListView(tasks: state.tasks),
+                              TasksListView(tasks: state.displayTasks),
                               const Padding(
                                 padding: EdgeInsets.only(
-                                  left: 54.0,
-                                  right: 64.0,
-                                  bottom: 18.0,
+                                  left: 54,
+                                  right: 64,
+                                  bottom: 18,
                                 ),
                                 child: HomeTaskTextField(),
                               ),
@@ -118,9 +116,9 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
+            MaterialPageRoute<Task>(
               builder: (context) {
-                return const TaskPage(task: null);
+                return const TaskPage();
               },
             ),
           ).then(
@@ -132,7 +130,7 @@ class _HomePageState extends State<HomePage> {
         child: Image.asset(
           'assets/images/add.png',
           color: Colors.white,
-          height: 14.0,
+          height: 14,
         ),
       ),
     );

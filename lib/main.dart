@@ -7,8 +7,8 @@ import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/service/database_provider.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/color_extension.dart';
+import 'package:shmr/utils/const.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +16,7 @@ void main() async {
 
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-  var remoteConfig = FirebaseRemoteConfig.instance;
+  final remoteConfig = FirebaseRemoteConfig.instance;
   await remoteConfig.setConfigSettings(
     RemoteConfigSettings(
       fetchTimeout: const Duration(minutes: 1),
