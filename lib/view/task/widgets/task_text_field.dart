@@ -29,11 +29,11 @@ class _TaskTextFieldState extends State<TaskTextField> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Const.kBackSecondary,
+        color: ConstStyles.kBackSecondary,
         borderRadius: BorderRadius.circular(8),
         boxShadow: const <BoxShadow>[
           BoxShadow(
-            color: Const.kLightGray,
+            color: ConstStyles.kLightGray,
             offset: Offset(0, 2),
             blurRadius: 1,
           ),
@@ -54,7 +54,7 @@ class _TaskTextFieldState extends State<TaskTextField> {
           hintStyle: Theme.of(context)
               .textTheme
               .bodyText1
-              ?.copyWith(color: Const.kLightGray),
+              ?.copyWith(color: ConstStyles.kLightGray),
         ),
       ),
     );

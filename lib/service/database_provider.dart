@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/utils/const.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseProvider {
@@ -9,21 +10,9 @@ class DatabaseProvider {
 
   static Future<void> init() async {
     database = await openDatabase(
-      join(await getDatabasesPath(), 'done_app_database.db'),
+      join(await getDatabasesPath(), ConstLocal.databaseName),
       onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE tasks( '
-          'id TEXT NOT NULL PRIMARY KEY, '
-          'text TEXT NOT NULL, '
-          'importance TEXT NOT NULL, '
-          'deadline INTEGER, '
-          'done INTEGER NOT NULL, '
-          'color TEXT, '
-          'created_at INTEGER NOT NULL, '
-          'changed_at INTEGER NOT NULL, '
-          'last_updated_by TEXT NOT NULL '
-          '); ',
-        );
+        return db.execute(ConstLocal.createTasksTable);
       },
       version: 1,
     );
@@ -31,47 +20,43 @@ class DatabaseProvider {
 
   static Future<List<Task>> fetchTasks() async {
     final List<Map<String, dynamic>> maps = await database.query(
-      'tasks',
-      orderBy: 'created_at',
+      ConstLocal.tasksTableName,
+      orderBy: ConstLocal.createdAtField,
     );
     return List.generate(
       maps.length,
       (i) {
         final map = Map<String, Object?>.from(maps[i]);
-        if (map['done'] == 1) {
-          map['done'] = true;
-        } else {
-          map['done'] = false;
-        }
+        map[ConstLocal.doneField] = map[ConstLocal.doneField] == 1;
         return Task.fromJson(map);
       },
     );
   }
 
   static Future<void> addTask(Task task) async {
-    final json = task.toJson();
-    json['done'] = task.done ? 1 : 0;
+    final map = task.toJson();
+    map[ConstLocal.doneField] = task.done ? 1 : 0;
     await database.insert(
-      'tasks',
-      json,
+      ConstLocal.tasksTableName,
+      map,
     );
   }
 
   static Future<void> updateTask(Task task) async {
-    final json = task.toJson();
-    json['done'] = task.done ? 1 : 0;
+    final map = task.toJson();
+    map[ConstLocal.doneField] = task.done ? 1 : 0;
     await database.update(
-      'tasks',
-      json,
-      where: 'id = ?',
+      ConstLocal.tasksTableName,
+      map,
+      where: '${ConstLocal.idField} = ?',
       whereArgs: [task.id],
     );
   }
 
   static Future<void> deleteTask(String id) async {
     await database.delete(
-      'tasks',
-      where: 'id = ?',
+      ConstLocal.tasksTableName,
+      where: '${ConstLocal.idField} = ?',
       whereArgs: [id],
     );
   }
@@ -79,11 +64,11 @@ class DatabaseProvider {
   static Future<void> addTasksList(List<Task> tasks) async {
     final batch = database.batch();
     for (final task in tasks) {
-      final json = task.toJson();
-      json['done'] = task.done ? 1 : 0;
+      final map = task.toJson();
+      map[ConstLocal.doneField] = task.done ? 1 : 0;
       batch.insert(
-        'tasks',
-        json,
+        ConstLocal.tasksTableName,
+        map,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }

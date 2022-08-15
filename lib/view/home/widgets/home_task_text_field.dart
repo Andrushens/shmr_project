@@ -40,7 +40,7 @@ class _HomeTaskTextFieldState extends State<HomeTaskTextField> {
         hintStyle: Theme.of(context)
             .textTheme
             .bodyText1
-            ?.copyWith(color: Const.kLightGray),
+            ?.copyWith(color: ConstStyles.kLightGray),
       ),
     );
   }

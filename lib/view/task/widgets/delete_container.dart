@@ -27,13 +27,14 @@ class DeleteContainer extends StatelessWidget {
             Image.asset(
               'assets/images/delete.png',
               width: 16,
-              color: isAvailable ? Const.kRed : Const.kLightGray,
+              color: isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
             ),
             const SizedBox(width: 14),
             Text(
               S.current.delete,
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: isAvailable ? Const.kRed : Const.kLightGray,
+                    color:
+                        isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
                   ),
             ),
           ],

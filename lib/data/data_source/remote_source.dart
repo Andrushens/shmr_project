@@ -15,13 +15,10 @@ class RemoteSourceImpl implements RemoteSource {
   RemoteSourceImpl() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://beta.mrdekk.ru/todobackend/',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer Taixpool',
-        },
-        receiveTimeout: 16000,
-        sendTimeout: 16000,
+        baseUrl: ConstRemote.baseUrl,
+        headers: ConstRemote.baseHeaders,
+        receiveTimeout: ConstRemote.receiveTimeout,
+        sendTimeout: ConstRemote.sendTimeout,
       ),
     )..interceptors.add(LoggingInterceptor());
   }
@@ -31,20 +28,20 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      final response = await dio.get('list');
+      final response = await dio.get(ConstRemote.fetchTasksPath);
       final data = response.data as Map<String, dynamic>;
-      if (response.statusCode == 200 && data['status'] == 'ok') {
-        final revision = data['revision'];
-        logger.i('revision: $revision');
-        dio.options.headers['X-Last-Known-Revision'] = revision;
-        final jsonList = data['list'] as List<dynamic>;
+      if (data[ConstRemote.statusField] == 'ok') {
+        final revision = data[ConstRemote.revisionField];
+        dio.options.headers[ConstRemote.revisionHeader] = revision;
+        final jsonList = data[ConstRemote.listField] as List<dynamic>;
         final tasks = <Task>[];
         for (final json in jsonList) {
           tasks.add(Task.fromJson(json as Map<String, Object?>));
         }
         return tasks;
+      } else {
+        throw ServerException();
       }
-      throw ServerException();
     } catch (error) {
       rethrow;
     }
@@ -54,15 +51,15 @@ class RemoteSourceImpl implements RemoteSource {
   Future<void> addTask(Task task) async {
     try {
       final response = await dio.post(
-        'list',
+        ConstRemote.addTaskPath,
         data: {
-          'element': task.toJson(),
+          ConstRemote.elementField: task.toJson(),
         },
       );
       final data = response.data as Map<String, dynamic>;
-      if (data['status'] == 'ok') {
-        final revision = data['revision'];
-        dio.options.headers['X-Last-Known-Revision'] = revision;
+      if (data[ConstRemote.statusField] == 'ok') {
+        final revision = data[ConstRemote.revisionField];
+        dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {
         throw ServerException();
       }
@@ -75,12 +72,12 @@ class RemoteSourceImpl implements RemoteSource {
   Future<void> deleteTask(String id) async {
     try {
       final response = await dio.delete(
-        'list/$id',
+        ConstRemote.deleteTaskPath(id),
       );
       final data = response.data as Map<String, dynamic>;
-      if (data['status'] == 'ok') {
-        final revision = data['revision'];
-        dio.options.headers['X-Last-Known-Revision'] = revision;
+      if (data[ConstRemote.statusField] == 'ok') {
+        final revision = data[ConstRemote.revisionField];
+        dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {
         throw ServerException();
       }
@@ -93,15 +90,15 @@ class RemoteSourceImpl implements RemoteSource {
   Future<void> updateTask(Task task) async {
     try {
       final response = await dio.put(
-        'list/${task.id}',
+        ConstRemote.updateTaskPath(task.id),
         data: {
-          'element': task.toJson(),
+          ConstRemote.elementField: task.toJson(),
         },
       );
       final data = response.data as Map<String, dynamic>;
-      if (data['status'] == 'ok') {
-        final revision = data['revision'];
-        dio.options.headers['X-Last-Known-Revision'] = revision;
+      if (data[ConstRemote.statusField] == 'ok') {
+        final revision = data[ConstRemote.revisionField];
+        dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {
         throw ServerException();
       }

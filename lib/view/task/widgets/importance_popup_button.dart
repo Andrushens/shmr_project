@@ -27,7 +27,7 @@ class ImportancePopupButton extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                ?.copyWith(color: Const.kLightGray),
+                ?.copyWith(color: ConstStyles.kLightGray),
           ),
         ],
       ),

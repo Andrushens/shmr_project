@@ -11,7 +11,7 @@ class TaskSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      backgroundColor: Const.kBackPrimary,
+      backgroundColor: ConstStyles.kBackPrimary,
       leading: IconButton(
         onPressed: () => context.read<TaskCubit>().completeEditing(task: null),
         icon: Image.asset(
@@ -31,7 +31,7 @@ class TaskSliverAppBar extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
-                  ?.copyWith(color: Const.kBlue),
+                  ?.copyWith(color: ConstStyles.kBlue),
             ),
           ),
         ),

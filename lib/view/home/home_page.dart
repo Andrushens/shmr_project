@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Const.kBackPrimary,
+      backgroundColor: ConstStyles.kBackPrimary,
       body: SafeArea(
         child: FutureBuilder(
           future: context.read<HomeCubit>().initTasks(),
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                     SliverAppBar(
                       expandedHeight: 150,
                       pinned: true,
-                      backgroundColor: Const.kBackPrimary,
+                      backgroundColor: ConstStyles.kBackPrimary,
                       flexibleSpace: CustomFlexibleSpace(
                         displayCompleted: state.displayCompleted,
                         completedAmount: state.completedAmount,

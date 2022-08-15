@@ -93,7 +93,7 @@ class CustomFlexibleSpace extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2
-                              ?.copyWith(color: Const.kLightGray),
+                              ?.copyWith(color: ConstStyles.kLightGray),
                         ),
                       ),
                     ),
@@ -114,7 +114,7 @@ class CustomFlexibleSpace extends StatelessWidget {
                         ? 'assets/images/visibility.png'
                         : 'assets/images/visibility_off.png',
                     height: displayCompleted ? 15.0 : 19.0,
-                    color: Const.kBlue,
+                    color: ConstStyles.kBlue,
                   ),
                 ),
               ),

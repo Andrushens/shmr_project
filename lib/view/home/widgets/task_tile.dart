@@ -37,7 +37,7 @@ class TaskTile extends StatelessWidget {
       },
       secondaryBackground: Container(
         padding: const EdgeInsets.only(right: 24),
-        color: Const.kRed,
+        color: ConstStyles.kRed,
         alignment: Alignment.centerRight,
         child: Image.asset(
           'assets/images/delete.png',
@@ -48,7 +48,7 @@ class TaskTile extends StatelessWidget {
       ),
       background: Container(
         padding: const EdgeInsets.only(left: 24),
-        color: Const.kGreen,
+        color: ConstStyles.kGreen,
         alignment: Alignment.centerLeft,
         child: Image.asset(
           'assets/images/check.png',
@@ -73,10 +73,10 @@ class TaskTile extends StatelessWidget {
                   unselectedWidgetColor:
                       importanceFromString(task.importance) == Importance.high
                           ? Theme.of(context).errorColor
-                          : Const.kLightGray,
+                          : ConstStyles.kLightGray,
                 ),
                 child: Checkbox(
-                  activeColor: Const.kGreen,
+                  activeColor: ConstStyles.kGreen,
                   value: task.done,
                   onChanged: (val) {
                     onDoneUpdate(task.id, done: val!);
@@ -117,7 +117,7 @@ class TaskTile extends StatelessWidget {
                                   .subtitle2
                                   ?.copyWith(
                                     color: task.done
-                                        ? Const.kLightGray
+                                        ? ConstStyles.kLightGray
                                         : Theme.of(context)
                                             .unselectedWidgetColor,
                                   ),
@@ -133,7 +133,9 @@ class TaskTile extends StatelessWidget {
                             child: Image.asset(
                               'assets/images/arrow_down.png',
                               width: 10,
-                              color: task.done ? Const.kLightGray : Const.kGray,
+                              color: task.done
+                                  ? ConstStyles.kLightGray
+                                  : ConstStyles.kGray,
                             ),
                           ),
                         },
@@ -146,7 +148,8 @@ class TaskTile extends StatelessWidget {
                                 .textTheme
                                 .bodyText1
                                 ?.copyWith(
-                                  color: task.done ? Const.kLightGray : null,
+                                  color:
+                                      task.done ? ConstStyles.kLightGray : null,
                                   decoration: task.done
                                       ? TextDecoration.lineThrough
                                       : null,
@@ -163,7 +166,7 @@ class TaskTile extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2
-                              ?.copyWith(color: Const.kLightGray),
+                              ?.copyWith(color: ConstStyles.kLightGray),
                         ),
                       ),
                   ],
@@ -192,7 +195,7 @@ class TaskTile extends StatelessWidget {
                 icon: Image.asset(
                   'assets/images/info_outline.png',
                   height: 20,
-                  color: Const.kLightGray,
+                  color: ConstStyles.kLightGray,
                 ),
               ),
             ),

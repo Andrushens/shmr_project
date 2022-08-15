@@ -24,7 +24,7 @@ class TaskPage extends StatelessWidget {
         child: GestureDetector(
           onTap: FocusScope.of(context).unfocus,
           child: ColoredBox(
-            color: Const.kBackPrimary,
+            color: ConstStyles.kBackPrimary,
             child: BlocProvider(
               create: (context) => TaskCubit(initialTask: task),
               child: BlocListener<TaskCubit, TaskState>(

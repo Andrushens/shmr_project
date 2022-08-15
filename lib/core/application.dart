@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       value: tasksRepository,
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: Const.themeData.copyWith(
+        theme: ConstStyles.themeData.copyWith(
           errorColor: importanceColor,
           unselectedWidgetColor: importanceColor,
         ),

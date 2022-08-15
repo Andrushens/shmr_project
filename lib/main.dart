@@ -25,13 +25,15 @@ void main() async {
   );
   await remoteConfig.setDefaults(
     {
-      'importance_color': Const.kRed.toHex(),
+      ConstStyles.importanceColorFBField: ConstStyles.kRed.toHex(),
     },
   );
   try {
     await remoteConfig.fetchAndActivate();
   } catch (_) {}
-  final colorString = remoteConfig.getString('importance_color');
+  final colorString = remoteConfig.getString(
+    ConstStyles.importanceColorFBField,
+  );
   final importanceColor = ColorEx.fromHex(colorString);
   final tasksRepository = TasksRepositoryImpl(
     remoteSource: RemoteSourceImpl(),

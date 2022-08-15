@@ -37,7 +37,7 @@ class DeadlineContainer extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      ?.copyWith(color: Const.kBlue),
+                      ?.copyWith(color: ConstStyles.kBlue),
                 ),
               ),
           ],
