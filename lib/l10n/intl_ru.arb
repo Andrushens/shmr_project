@@ -1,0 +1,27 @@
+{
+    "myTasks": "Мои дела",
+    "doneAmount": "Выполнено - {amount}",
+    "newTask": "Новое",
+    "save": "Сохранить",
+    "whatToDo": "Что надо сделать...",
+    "importance": "Важность",
+    "no": "Нет",
+    "low": "Низкий",
+    "basic": "Нет",
+    "important": "Высокий",
+    "completeTill": "Сделать до",
+    "delete": "Удалить",
+
+    "january": "января",
+    "february": "февраля",
+    "march": "марта",
+    "april": "апреля",
+    "may": "мая",
+    "june": "июня",
+    "july": "июля",
+    "august": "августа",
+    "september": "сентября",
+    "october": "октября",
+    "november": "ноября",
+    "december": "декабря"
+}

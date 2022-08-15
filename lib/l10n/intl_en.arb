@@ -1,0 +1,27 @@
+{
+    "myTasks": "My tasks",
+    "doneAmount": "Done - {amount}",
+    "newTask": "New task",
+    "save": "Save",
+    "whatToDo": "What to do...",
+    "importance": "Importance",
+    "no": "No",
+    "low": "Low",
+    "basic": "No",
+    "important": "Important",
+    "completeTill": "Complete till",
+    "delete": "Delete",
+
+    "january": "january",
+    "february": "february",
+    "march": "march",
+    "april": "april",
+    "may": "may",
+    "june": "june",
+    "july": "july",
+    "august": "august",
+    "september": "september",
+    "october": "october",
+    "november": "november",
+    "december": "december"
+}
