@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shmr/bloc/task/task_cubit.dart';
 import 'package:shmr/generated/l10n.dart';
+import 'package:shmr/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
+import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_flexible_space.dart';
+import 'package:shmr/view/home/widgets/home_task_text_field.dart';
 import 'package:shmr/view/home/widgets/task_tile.dart';
+import 'package:shmr/view/home/widgets/tasks_list_view.dart';
 import 'package:shmr/view/task/task_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,32 +27,43 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    taskTextController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Const.kBackPrimary,
       body: SafeArea(
         child: FutureBuilder(
-          future: context.read<TaskCubit>().initTasks(),
+          future: context.read<HomeCubit>().initTasks(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            return BlocBuilder<TaskCubit, TaskState>(
+            return BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
                 return CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
-                    const SliverAppBar(
+                    SliverAppBar(
                       expandedHeight: 150.0,
                       pinned: true,
                       backgroundColor: Const.kBackPrimary,
-                      flexibleSpace: CustomFlexibleSpace(),
+                      flexibleSpace: CustomFlexibleSpace(
+                        displayCompleted: state.displayCompleted,
+                        completedAmount: state.completedAmount,
+                        onDisplayCompletedUpdate:
+                            context.read<HomeCubit>().changeDisplayCompleted,
+                      ),
                     ),
                     SliverToBoxAdapter(
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(8.0, 00.0, 8.0, 8.0),
+                        margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10.0),
@@ -80,65 +94,14 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(10.0),
                           child: Column(
                             children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                primary: false,
-                                itemCount: state.displayCompleted
-                                    ? state.tasks.length
-                                    : state.tasks
-                                        .where((e) => e.done == false)
-                                        .length,
-                                itemBuilder: (context, index) {
-                                  var task = state.displayCompleted
-                                      ? state.tasks[index]
-                                      : state.tasks
-                                          .where((e) => e.done == false)
-                                          .toList()[index];
-                                  return TaskTile(
-                                    task: task,
-                                    onDoneUpdate: context
-                                        .read<TaskCubit>()
-                                        .updateTaskDone,
-                                    onDelete:
-                                        context.read<TaskCubit>().deleteTask,
-                                    onUpdate:
-                                        context.read<TaskCubit>().updateTask,
-                                  );
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
+                              TasksListView(tasks: state.tasks),
+                              const Padding(
+                                padding: EdgeInsets.only(
                                   left: 54.0,
                                   right: 64.0,
                                   bottom: 18.0,
                                 ),
-                                child: TextField(
-                                  controller: taskTextController,
-                                  keyboardType: TextInputType.text,
-                                  onEditingComplete: () {
-                                    if (taskTextController.text.isEmpty) {
-                                      FocusScope.of(context).unfocus();
-                                      return;
-                                    }
-                                    context.read<TaskCubit>().addTask(
-                                          value: taskTextController.text,
-                                        );
-                                    taskTextController.clear();
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                  maxLines: null,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: S.current.newTask,
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.copyWith(
-                                          color: Const.kLightGray,
-                                        ),
-                                  ),
-                                ),
+                                child: HomeTaskTextField(),
                               ),
                             ],
                           ),
@@ -154,13 +117,16 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var onAdd = context.read<TaskCubit>().addTask;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return TaskPage(onAdd: onAdd);
+                return const TaskPage(task: null);
               },
             ),
+          ).then(
+            (task) async {
+              await context.read<HomeCubit>().handleTaskPagePop(task);
+            },
           );
         },
         child: Image.asset(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/model/importance.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/date_formatter.dart';
+import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/task/task_page.dart';
 
 class TaskTile extends StatelessWidget {
@@ -85,17 +87,17 @@ class TaskTile extends StatelessWidget {
             const SizedBox(width: 14.0),
             Expanded(
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return TaskPage(
-                          task: task,
-                          onDelete: onDelete,
-                          onUpdate: onUpdate,
-                        );
+                        return TaskPage(task: task);
                       },
                     ),
+                  ).then(
+                    (task) async {
+                      await context.read<HomeCubit>().handleTaskPagePop(task);
+                    },
                   );
                 },
                 child: Column(
@@ -174,17 +176,17 @@ class TaskTile extends StatelessWidget {
               height: 20.0,
               child: IconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        return TaskPage(
-                          task: task,
-                          onDelete: onDelete,
-                          onUpdate: onUpdate,
-                        );
+                        return TaskPage(task: task);
                       },
                     ),
+                  ).then(
+                    (task) async {
+                      await context.read<HomeCubit>().handleTaskPagePop(task);
+                    },
                   );
                 },
                 icon: Image.asset(
