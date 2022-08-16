@@ -9,6 +9,7 @@ class DeleteContainer extends StatelessWidget {
     required this.isAvailable,
     super.key,
   });
+  
   final bool isAvailable;
 
   @override

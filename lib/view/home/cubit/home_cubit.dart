@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/utils/failure.dart';
 import 'package:uuid/uuid.dart';
 
 part 'home_state.dart';
@@ -22,7 +23,12 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> initTasks() async {
     (await tasksRepository.fetchTasks()).fold(
-      (failure) {},
+      (failure) {
+        switch (failure.runtimeType) {
+          case ServerFailure:
+            break;
+        }
+      },
       (tasks) {
         final completedAmount = tasks.where((e) => e.done).length;
         final displayTasks = tasks
@@ -138,7 +144,7 @@ class HomeCubit extends Cubit<HomeState> {
     await updateTask(updatedTask);
   }
 
-  Future<void> handleTaskPagePop(dynamic task) async {
+  Future<void> handleTaskPagePop(Task? task) async {
     if (task is Task) {
       if (task.isDeleted) {
         return deleteTask(task.id);
