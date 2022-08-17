@@ -27,6 +27,8 @@ dependencies:
   firebase_remote_config: ^2.0.13
   firebase_crashlytics: ^2.8.6
   intl: ^0.17.0
+  get_it: ^7.2.0
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:

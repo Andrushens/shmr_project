@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/model/importance.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/date_formatter.dart';
-import 'package:shmr/view/home/cubit/home_cubit.dart';
-import 'package:shmr/view/task/task_page.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -88,16 +87,9 @@ class TaskTile extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute<Task>(
-                      builder: (context) {
-                        return TaskPage(task: task);
-                      },
-                    ),
-                  ).then(
-                    (task) async {
-                      await context.read<HomeCubit>().handleTaskPagePop(task);
-                    },
+                  await NavigationService.of(context).navigateTo(
+                    Routes.taskPage,
+                    data: task,
                   );
                 },
                 child: Column(
@@ -180,16 +172,9 @@ class TaskTile extends StatelessWidget {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute<Task>(
-                      builder: (context) {
-                        return TaskPage(task: task);
-                      },
-                    ),
-                  ).then(
-                    (task) async {
-                      await context.read<HomeCubit>().handleTaskPagePop(task);
-                    },
+                  await NavigationService.of(context).navigateTo(
+                    Routes.taskPage,
+                    data: task,
                   );
                 },
                 icon: Image.asset(

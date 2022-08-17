@@ -1,5 +1,5 @@
 import 'package:shmr/model/task/task.dart';
-import 'package:shmr/service/database_provider.dart';
+import 'package:shmr/service/database_service.dart';
 
 abstract class LocalSource {
   Future<List<Task>> fetchTasks();
@@ -13,7 +13,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      final tasks = await DatabaseProvider.fetchTasks();
+      final tasks = await DatabaseSrvice.fetchTasks();
       return tasks;
     } catch (e) {
       rethrow;
@@ -23,7 +23,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> addTask(Task task) async {
     try {
-      await DatabaseProvider.addTask(task);
+      await DatabaseSrvice.addTask(task);
     } catch (e) {
       rethrow;
     }
@@ -32,7 +32,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> deleteTask(String id) async {
     try {
-      await DatabaseProvider.deleteTask(id);
+      await DatabaseSrvice.deleteTask(id);
     } catch (e) {
       rethrow;
     }
@@ -41,7 +41,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> updateTask(Task task) async {
     try {
-      await DatabaseProvider.updateTask(task);
+      await DatabaseSrvice.updateTask(task);
     } catch (e) {
       rethrow;
     }
@@ -50,7 +50,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> addTasksList(List<Task> tasks) async {
     try {
-      await DatabaseProvider.addTasksList(tasks);
+      await DatabaseSrvice.addTasksList(tasks);
     } catch (e) {
       rethrow;
     }

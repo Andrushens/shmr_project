@@ -3,8 +3,8 @@ import 'package:shmr/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseProvider {
-  DatabaseProvider._();
+class DatabaseSrvice {
+  DatabaseSrvice._();
 
   static late final Database database;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 import 'package:shmr/view/task/widgets/deadline_container.dart';
@@ -34,7 +35,7 @@ class TaskPage extends StatelessWidget {
                       current.isEditingComplete;
                 },
                 listener: (context, state) {
-                  Navigator.of(context).pop(state.task);
+                  NavigationService.of(context).back();
                 },
                 child: CustomScrollView(
                   slivers: [

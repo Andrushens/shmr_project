@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/generated/l10n.dart';
+import 'package:shmr/service/navigation/awesome_router_delegate.dart';
 import 'package:shmr/utils/const.dart';
-import 'package:shmr/view/home/cubit/home_cubit.dart';
-import 'package:shmr/view/home/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: tasksRepository,
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ConstStyles.themeData.copyWith(
           errorColor: importanceColor,
@@ -37,12 +36,8 @@ class MyApp extends StatelessWidget {
           Locale('ru', 'RU'),
           // Locale('en', 'US'),
         ],
-        home: BlocProvider(
-          create: (context) => HomeCubit(
-            tasksRepository: context.read<TasksRepository>(),
-          ),
-          child: const HomePage(),
-        ),
+        routeInformationParser: AwesomeRouteInformationParser(),
+        routerDelegate: AwesomeRouterDelegate(),
       ),
     );
   }
