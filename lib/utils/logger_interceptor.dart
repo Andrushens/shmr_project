@@ -1,18 +1,25 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:shmr/utils/const.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
-  LoggingInterceptor();
+  final JsonEncoder encoder;
+  final int maxLength;
+
+  LoggingInterceptor()
+      : encoder = const JsonEncoder.withIndent('     '),
+        maxLength = 2048;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final formattedHeader = encoder.convert(options.headers);
+    final formattedBody = encoder.convert(options.data);
     logger.d(
       '**** API Request Start****\n\n'
-      '${options.method} ${options.uri}\n\n'
-      'Headers:\n'
-      '${options.headers.entries.map((entry) => '\n    ${entry.key}: ${entry.value}${options.headers.entries.last.key == entry.key ? '\n' : ''}')}\n'
-      'Body:\n'
-      '    ${options.data ?? 'null'}\n\n'
+      '${options.method} ${options.uri}\n'
+      'Headers: ${formattedHeader.length > maxLength ? 'HUGE OUTPUT(${formattedHeader.length} symbols)' : formattedHeader}\n'
+      'Body: ${formattedBody.length > maxLength ? 'HUGE OUTPUT(${formattedBody.length} symbols)' : formattedBody}\n\n'
       '**** API Request End****',
     );
     handler.next(options);
@@ -32,10 +39,12 @@ class LoggingInterceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final formattedData = encoder.convert(response.data);
     logger.i(
       '**** API Response Start ****\n\n'
       '${response.requestOptions.method} ${response.requestOptions.uri}\n'
-      'Status code: ${response.statusCode}\n\n'
+      'Status code: ${response.statusCode}\n'
+      'Data: ${formattedData.length > maxLength ? 'HUGE OUTPUT(${formattedData.length} symbols)' : formattedData}\n\n'
       '**** API Response End****',
     );
     handler.next(response);

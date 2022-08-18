@@ -17,6 +17,7 @@ class Task with _$Task {
     @JsonKey(name: 'created_at') required int createdAt,
     @JsonKey(name: 'changed_at') required int changedAt,
     @JsonKey(name: 'last_updated_by') required String lastUpdatedBy,
+    @Default(false) @JsonKey(ignore: true) bool isDeleted,
   }) = _Task;
 
   factory Task.fromJson(Map<String, Object?> json) => _$TaskFromJson(json);

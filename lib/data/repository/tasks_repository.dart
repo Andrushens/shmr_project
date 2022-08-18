@@ -28,7 +28,7 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.addTasksList(tasks);
       return Right(tasks);
     } catch (e) {
-      logger.w('failed to fetch tasks remote');
+      logger.w('failed to fetch tasks remote: $e');
     }
     try {
       var tasks = await localSource.fetchTasks();

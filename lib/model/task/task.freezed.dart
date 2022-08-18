@@ -32,6 +32,8 @@ mixin _$Task {
   int get changedAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'last_updated_by')
   String get lastUpdatedBy => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  bool get isDeleted => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +53,8 @@ abstract class $TaskCopyWith<$Res> {
       String? color,
       @JsonKey(name: 'created_at') int createdAt,
       @JsonKey(name: 'changed_at') int changedAt,
-      @JsonKey(name: 'last_updated_by') String lastUpdatedBy});
+      @JsonKey(name: 'last_updated_by') String lastUpdatedBy,
+      @JsonKey(ignore: true) bool isDeleted});
 }
 
 /// @nodoc
@@ -73,6 +76,7 @@ class _$TaskCopyWithImpl<$Res> implements $TaskCopyWith<$Res> {
     Object? createdAt = freezed,
     Object? changedAt = freezed,
     Object? lastUpdatedBy = freezed,
+    Object? isDeleted = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -111,6 +115,10 @@ class _$TaskCopyWithImpl<$Res> implements $TaskCopyWith<$Res> {
           ? _value.lastUpdatedBy
           : lastUpdatedBy // ignore: cast_nullable_to_non_nullable
               as String,
+      isDeleted: isDeleted == freezed
+          ? _value.isDeleted
+          : isDeleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -129,7 +137,8 @@ abstract class _$$_TaskCopyWith<$Res> implements $TaskCopyWith<$Res> {
       String? color,
       @JsonKey(name: 'created_at') int createdAt,
       @JsonKey(name: 'changed_at') int changedAt,
-      @JsonKey(name: 'last_updated_by') String lastUpdatedBy});
+      @JsonKey(name: 'last_updated_by') String lastUpdatedBy,
+      @JsonKey(ignore: true) bool isDeleted});
 }
 
 /// @nodoc
@@ -152,6 +161,7 @@ class __$$_TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? changedAt = freezed,
     Object? lastUpdatedBy = freezed,
+    Object? isDeleted = freezed,
   }) {
     return _then(_$_Task(
       id: id == freezed
@@ -190,6 +200,10 @@ class __$$_TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
           ? _value.lastUpdatedBy
           : lastUpdatedBy // ignore: cast_nullable_to_non_nullable
               as String,
+      isDeleted: isDeleted == freezed
+          ? _value.isDeleted
+          : isDeleted // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -206,7 +220,8 @@ class _$_Task implements _Task {
       this.color,
       @JsonKey(name: 'created_at') required this.createdAt,
       @JsonKey(name: 'changed_at') required this.changedAt,
-      @JsonKey(name: 'last_updated_by') required this.lastUpdatedBy});
+      @JsonKey(name: 'last_updated_by') required this.lastUpdatedBy,
+      @JsonKey(ignore: true) this.isDeleted = false});
 
   factory _$_Task.fromJson(Map<String, dynamic> json) => _$$_TaskFromJson(json);
 
@@ -231,10 +246,13 @@ class _$_Task implements _Task {
   @override
   @JsonKey(name: 'last_updated_by')
   final String lastUpdatedBy;
+  @override
+  @JsonKey(ignore: true)
+  final bool isDeleted;
 
   @override
   String toString() {
-    return 'Task(id: $id, text: $text, importance: $importance, done: $done, deadline: $deadline, color: $color, createdAt: $createdAt, changedAt: $changedAt, lastUpdatedBy: $lastUpdatedBy)';
+    return 'Task(id: $id, text: $text, importance: $importance, done: $done, deadline: $deadline, color: $color, createdAt: $createdAt, changedAt: $changedAt, lastUpdatedBy: $lastUpdatedBy, isDeleted: $isDeleted)';
   }
 
   @override
@@ -252,7 +270,8 @@ class _$_Task implements _Task {
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.changedAt, changedAt) &&
             const DeepCollectionEquality()
-                .equals(other.lastUpdatedBy, lastUpdatedBy));
+                .equals(other.lastUpdatedBy, lastUpdatedBy) &&
+            const DeepCollectionEquality().equals(other.isDeleted, isDeleted));
   }
 
   @JsonKey(ignore: true)
@@ -267,7 +286,8 @@ class _$_Task implements _Task {
       const DeepCollectionEquality().hash(color),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(changedAt),
-      const DeepCollectionEquality().hash(lastUpdatedBy));
+      const DeepCollectionEquality().hash(lastUpdatedBy),
+      const DeepCollectionEquality().hash(isDeleted));
 
   @JsonKey(ignore: true)
   @override
@@ -290,12 +310,10 @@ abstract class _Task implements Task {
       required final bool done,
       final int? deadline,
       final String? color,
-      @JsonKey(name: 'created_at')
-          required final int createdAt,
-      @JsonKey(name: 'changed_at')
-          required final int changedAt,
-      @JsonKey(name: 'last_updated_by')
-          required final String lastUpdatedBy}) = _$_Task;
+      @JsonKey(name: 'created_at') required final int createdAt,
+      @JsonKey(name: 'changed_at') required final int changedAt,
+      @JsonKey(name: 'last_updated_by') required final String lastUpdatedBy,
+      @JsonKey(ignore: true) final bool isDeleted}) = _$_Task;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$_Task.fromJson;
 
@@ -320,6 +338,9 @@ abstract class _Task implements Task {
   @override
   @JsonKey(name: 'last_updated_by')
   String get lastUpdatedBy;
+  @override
+  @JsonKey(ignore: true)
+  bool get isDeleted;
   @override
   @JsonKey(ignore: true)
   _$$_TaskCopyWith<_$_Task> get copyWith => throw _privateConstructorUsedError;
