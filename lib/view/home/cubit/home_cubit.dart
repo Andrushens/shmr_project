@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/failure.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,6 +23,7 @@ class HomeCubit extends Cubit<HomeState> {
         );
 
   final TasksRepository tasksRepository;
+  final navigationService = locator<NavigationService>();
 
   Future<void> initTasks() async {
     (await tasksRepository.fetchTasks()).fold(
@@ -144,7 +148,15 @@ class HomeCubit extends Cubit<HomeState> {
     await updateTask(updatedTask);
   }
 
-  Future<void> handleTaskPagePop(Task? task) async {
+  Future<void> navigateToTaskPage([Task? task]) async {
+    final newTask = await navigationService.navigateTo(
+      Routes.taskPage,
+      data: task,
+    );
+    await _handleTaskPagePop(newTask);
+  }
+
+  Future<void> _handleTaskPagePop(dynamic task) async {
     if (task is Task) {
       if (task.isDeleted) {
         return deleteTask(task.id);

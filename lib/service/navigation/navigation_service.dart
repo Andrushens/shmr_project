@@ -1,50 +1,59 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/view/home/home_page.dart';
 import 'package:shmr/view/task/task_page.dart';
 
 class NavigationService extends ChangeNotifier {
-  static NavigationService of(BuildContext context) {
-    return Provider.of<NavigationService>(context, listen: false);
-  }
-
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  List<Page<dynamic>> get pages => List.unmodifiable(_pages);
-  final List<Page<dynamic>> _pages = [
-    const MaterialPage(
-      child: HomePage(),
-      name: Routes.homePage,
+  List<PageDef> get pageDefs => List.unmodifiable(_pageDefs);
+  final List<PageDef> _pageDefs = [
+    PageDef(
+      completer: Completer(),
+      page: MaterialPage(
+        child: const HomePage(),
+        name: Routes.homePage,
+        key: UniqueKey(),
+      ),
     ),
   ];
 
-  void didPop() {
-    _pages.removeLast();
+  void didPop(dynamic result) {
+    final page = _pageDefs.removeLast();
+    page.completer.complete(result);
     notifyListeners();
   }
 
-  Future<void> setNewRoutePath(RouteDef routeDef) async {
+  Future<dynamic> setNewRoutePath(RouteDef routeDef) async {
     switch (routeDef.path) {
       case Routes.homePage:
-        _pages.removeWhere((e) => e.name != Routes.homePage);
+        _pageDefs.removeWhere((e) => e.page.name != Routes.homePage);
+        notifyListeners();
         break;
       case Routes.taskPage:
-        _pages.add(
-          MaterialPage(
-            child: TaskPage(
-              task: routeDef.data as Task?,
-            ),
-            name: Routes.taskPage,
-            key: UniqueKey(),
+        final completer = Completer<Task?>();
+        final page = MaterialPage<dynamic>(
+          child: TaskPage(
+            task: routeDef.data as Task?,
           ),
+          name: Routes.taskPage,
+          key: UniqueKey(),
         );
-        break;
+        if (_pageDefs.last.page.name == Routes.taskPage) {
+          _pageDefs.removeLast();
+        }
+        _pageDefs.add(
+          PageDef(completer: completer, page: page),
+        );
+        notifyListeners();
+        return completer.future;
       default:
-        _pages.removeLast();
+        _pageDefs.removeLast();
+        notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<dynamic> navigateTo(String path, {dynamic data}) async {
@@ -65,8 +74,7 @@ class NavigationService extends ChangeNotifier {
     }
   }
 
-  void back() {
-    _pages.removeLast();
-    notifyListeners();
+  void back(dynamic result) {
+    didPop(result);
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:shmr/core/application.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
@@ -36,17 +37,14 @@ void main() async {
     ConstStyles.importanceColorFBField,
   );
   final importanceColor = ColorEx.fromHex(colorString);
-  final tasksRepository = TasksRepositoryImpl(
-    remoteSource: RemoteSourceImpl(),
-    localSource: LocalSourceImpl(),
-  );
 
   await DatabaseSrvice.init();
+
+  bootstrap();
 
   runApp(
     MyApp(
       importanceColor: importanceColor,
-      tasksRepository: tasksRepository,
     ),
   );
 }

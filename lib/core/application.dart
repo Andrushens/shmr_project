@@ -1,44 +1,87 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shmr/data/repository/tasks_repository.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/service/navigation/awesome_router_delegate.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
+import 'package:shmr/view/home/cubit/home_cubit.dart';
+import 'package:uni_links/uni_links.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     required this.importanceColor,
-    required this.tasksRepository,
     super.key,
   });
 
-  final TasksRepository tasksRepository;
   final Color importanceColor;
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final StreamSubscription<String?>? _streamSubscription;
+  late final HomeCubit _homeCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeCubit = locator<HomeCubit>();
+    handleInitialDeepLink();
+    handleIncomingLinks();
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> handleInitialDeepLink() async {
+    final link = await getInitialLink();
+    if (link != null) {
+      logger.i('Got initial link: $link');
+      if (taskPageRegExp.hasMatch(link)) {
+        await _homeCubit.navigateToTaskPage();
+      }
+    }
+  }
+
+  void handleIncomingLinks() {
+    _streamSubscription = linkStream.listen(
+      (link) async {
+        logger.i('Got incoming link: $link');
+        if (mounted && link != null && taskPageRegExp.hasMatch(link)) {
+          await _homeCubit.navigateToTaskPage();
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: tasksRepository,
-      child: MaterialApp.router(
-        title: 'Flutter Demo',
-        theme: ConstStyles.themeData.copyWith(
-          errorColor: importanceColor,
-          unselectedWidgetColor: importanceColor,
-        ),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('ru', 'RU'),
-          // Locale('en', 'US'),
-        ],
-        routeInformationParser: AwesomeRouteInformationParser(),
-        routerDelegate: AwesomeRouterDelegate(),
+    return MaterialApp.router(
+      title: 'Flutter Demo',
+      theme: ConstStyles.themeData.copyWith(
+        errorColor: widget.importanceColor,
+        unselectedWidgetColor: widget.importanceColor,
       ),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ru', 'RU'),
+        // Locale('en', 'US'),
+      ],
+      routeInformationParser: AwesomeRouteInformationParser(),
+      routerDelegate: AwesomeRouterDelegate(),
     );
   }
 }

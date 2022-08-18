@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
@@ -17,26 +18,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final TextEditingController taskTextController;
+  late final TextEditingController _taskTextController;
 
   @override
   void initState() {
     super.initState();
-    taskTextController = TextEditingController();
+    _taskTextController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    taskTextController.dispose();
+    _taskTextController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeCubit>(
-      create: (context) => HomeCubit(
-        tasksRepository: context.read<TasksRepository>(),
-      ),
+      create: (context) => locator<HomeCubit>(),
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -122,8 +121,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                NavigationService.of(context).navigateTo(Routes.taskPage);
+              onPressed: () async {
+                await context.read<HomeCubit>().navigateToTaskPage();
               },
               child: Image.asset(
                 'assets/images/add.png',

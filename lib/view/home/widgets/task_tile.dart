@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/model/importance.dart';
 import 'package:shmr/model/task/task.dart';
-import 'package:shmr/service/navigation/constants.dart';
-import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/date_formatter.dart';
+import 'package:shmr/view/home/cubit/home_cubit.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -87,10 +87,7 @@ class TaskTile extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  await NavigationService.of(context).navigateTo(
-                    Routes.taskPage,
-                    data: task,
-                  );
+                  await context.read<HomeCubit>().navigateToTaskPage(task);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,10 +169,7 @@ class TaskTile extends StatelessWidget {
               child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () async {
-                  await NavigationService.of(context).navigateTo(
-                    Routes.taskPage,
-                    data: task,
-                  );
+                  await context.read<HomeCubit>().navigateToTaskPage(task);
                 },
                 icon: Image.asset(
                   'assets/images/info_outline.png',

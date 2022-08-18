@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
@@ -11,11 +12,12 @@ import 'package:shmr/view/task/widgets/task_sliver_appbar.dart';
 import 'package:shmr/view/task/widgets/task_text_field.dart';
 
 class TaskPage extends StatelessWidget {
-  const TaskPage({
+  TaskPage({
     this.task,
     super.key,
   });
 
+  final _navigationService = locator<NavigationService>();
   final Task? task;
 
   @override
@@ -35,7 +37,7 @@ class TaskPage extends StatelessWidget {
                       current.isEditingComplete;
                 },
                 listener: (context, state) {
-                  NavigationService.of(context).back();
+                  _navigationService.back(state.task);
                 },
                 child: CustomScrollView(
                   slivers: [

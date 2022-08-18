@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
 
 class AwesomeRouterDelegate extends RouterDelegate<RouteDef>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RouteDef> {
   AwesomeRouterDelegate() {
-    pageManager.addListener(notifyListeners);
+    navigationService.addListener(notifyListeners);
   }
-  final NavigationService pageManager = NavigationService();
+  final NavigationService navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<NavigationService>.value(
-      value: pageManager,
+      value: navigationService,
       child: Consumer<NavigationService>(
-        builder: (context, pageManager, child) {
+        builder: (context, navigationService, child) {
           return Navigator(
             key: navigatorKey,
             onPopPage: _onPopPage,
-            pages: List.of(pageManager.pages),
+            pages: List.of(navigationService.pageDefs.map((e) => e.page)),
           );
         },
       ),
@@ -31,16 +32,16 @@ class AwesomeRouterDelegate extends RouterDelegate<RouteDef>
     if (!didPop) {
       return false;
     }
-    pageManager.didPop();
+    navigationService.didPop(result);
     return true;
   }
 
   @override
-  GlobalKey<NavigatorState> get navigatorKey => pageManager.navigatorKey;
+  GlobalKey<NavigatorState> get navigatorKey => navigationService.navigatorKey;
 
   @override
   Future<void> setNewRoutePath(RouteDef configuration) async {
-    await pageManager.setNewRoutePath(configuration);
+    await navigationService.setNewRoutePath(configuration);
   }
 }
 
