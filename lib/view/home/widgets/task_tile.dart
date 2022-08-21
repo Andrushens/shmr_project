@@ -5,25 +5,24 @@ import 'package:shmr/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/date_formatter.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
-import 'package:shmr/view/task/task_page.dart';
 
 class TaskTile extends StatelessWidget {
-  final Task task;
-  final Function(String id, bool value) onDoneUpdate;
-  final Function(String id) onDelete;
-  final Function(Task task) onUpdate;
-
   const TaskTile({
     required this.task,
     required this.onDoneUpdate,
     required this.onDelete,
     required this.onUpdate,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final Task task;
+  final Future<void> Function(String id, {required bool done}) onDoneUpdate;
+  final Future<void> Function(String id) onDelete;
+  final Future<void> Function(Task task) onUpdate;
 
   @override
   Widget build(BuildContext context) {
-    var date = task.deadline != null
+    final date = task.deadline != null
         ? DateTime.fromMillisecondsSinceEpoch(task.deadline!)
         : null;
     return Dismissible(
@@ -32,73 +31,63 @@ class TaskTile extends StatelessWidget {
         if (direction == DismissDirection.endToStart) {
           onDelete(task.id);
         } else {
-          onDoneUpdate(task.id, !task.done);
+          onDoneUpdate(task.id, done: !task.done);
         }
       },
       secondaryBackground: Container(
-        padding: const EdgeInsets.only(right: 24.0),
-        color: Const.kRed,
+        padding: const EdgeInsets.only(right: 24),
+        color: ConstStyles.kRed,
         alignment: Alignment.centerRight,
         child: Image.asset(
           'assets/images/delete.png',
-          width: 19.0,
-          height: 19.0,
+          width: 19,
+          height: 19,
           color: Colors.white,
         ),
       ),
       background: Container(
-        padding: const EdgeInsets.only(left: 24.0),
-        color: Const.kGreen,
+        padding: const EdgeInsets.only(left: 24),
+        color: ConstStyles.kGreen,
         alignment: Alignment.centerLeft,
         child: Image.asset(
           'assets/images/check.png',
-          width: 19.0,
-          height: 19.0,
+          width: 19,
+          height: 19,
           color: Colors.white,
         ),
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 14.0,
-          horizontal: 20.0,
+          vertical: 14,
+          horizontal: 20,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 22.0,
-              height: 22.0,
+              width: 22,
+              height: 22,
               child: Theme(
                 data: Theme.of(context).copyWith(
                   unselectedWidgetColor:
                       importanceFromString(task.importance) == Importance.high
                           ? Theme.of(context).errorColor
-                          : Const.kLightGray,
+                          : ConstStyles.kLightGray,
                 ),
                 child: Checkbox(
-                  activeColor: Const.kGreen,
+                  activeColor: ConstStyles.kGreen,
                   value: task.done,
                   onChanged: (val) {
-                    onDoneUpdate(task.id, val!);
+                    onDoneUpdate(task.id, done: val!);
                   },
                 ),
               ),
             ),
-            const SizedBox(width: 14.0),
+            const SizedBox(width: 14),
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return TaskPage(task: task);
-                      },
-                    ),
-                  ).then(
-                    (task) async {
-                      await context.read<HomeCubit>().handleTaskPagePop(task);
-                    },
-                  );
+                  await context.read<HomeCubit>().navigateToTaskPage(task);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +98,7 @@ class TaskTile extends StatelessWidget {
                         if (importanceFromString(task.importance) ==
                             Importance.high) ...{
                           Padding(
-                            padding: const EdgeInsets.only(right: 4.0),
+                            padding: const EdgeInsets.only(right: 4),
                             child: Text(
                               '!!',
                               style: Theme.of(context)
@@ -117,7 +106,7 @@ class TaskTile extends StatelessWidget {
                                   .subtitle2
                                   ?.copyWith(
                                     color: task.done
-                                        ? Const.kLightGray
+                                        ? ConstStyles.kLightGray
                                         : Theme.of(context)
                                             .unselectedWidgetColor,
                                   ),
@@ -127,13 +116,15 @@ class TaskTile extends StatelessWidget {
                             Importance.low) ...{
                           Padding(
                             padding: const EdgeInsets.only(
-                              right: 4.0,
-                              top: 4.0,
+                              right: 4,
+                              top: 4,
                             ),
                             child: Image.asset(
                               'assets/images/arrow_down.png',
-                              width: 10.0,
-                              color: task.done ? Const.kLightGray : Const.kGray,
+                              width: 10,
+                              color: task.done
+                                  ? ConstStyles.kLightGray
+                                  : ConstStyles.kGray,
                             ),
                           ),
                         },
@@ -146,7 +137,8 @@ class TaskTile extends StatelessWidget {
                                 .textTheme
                                 .bodyText1
                                 ?.copyWith(
-                                  color: task.done ? Const.kLightGray : null,
+                                  color:
+                                      task.done ? ConstStyles.kLightGray : null,
                                   decoration: task.done
                                       ? TextDecoration.lineThrough
                                       : null,
@@ -157,42 +149,32 @@ class TaskTile extends StatelessWidget {
                     ),
                     if (date != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
+                        padding: const EdgeInsets.only(top: 4),
                         child: Text(
                           DateFormatter.formatDate(date),
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2
-                              ?.copyWith(color: Const.kLightGray),
+                              ?.copyWith(color: ConstStyles.kLightGray),
                         ),
                       ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(width: 14.0),
+            const SizedBox(width: 14),
             SizedBox(
-              width: 20.0,
-              height: 20.0,
+              width: 20,
+              height: 20,
               child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return TaskPage(task: task);
-                      },
-                    ),
-                  ).then(
-                    (task) async {
-                      await context.read<HomeCubit>().handleTaskPagePop(task);
-                    },
-                  );
+                  await context.read<HomeCubit>().navigateToTaskPage(task);
                 },
                 icon: Image.asset(
                   'assets/images/info_outline.png',
-                  height: 20.0,
-                  color: Const.kLightGray,
+                  height: 20,
+                  color: ConstStyles.kLightGray,
                 ),
               ),
             ),

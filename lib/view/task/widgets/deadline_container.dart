@@ -6,13 +6,13 @@ import 'package:shmr/utils/date_formatter.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class DeadlineContainer extends StatelessWidget {
-  const DeadlineContainer({Key? key}) : super(key: key);
+  const DeadlineContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     final deadline = context.select<TaskCubit, DateTime?>(
       (cubit) {
-        var date = cubit.state.deadline;
+        final date = cubit.state.deadline;
         if (date is int) {
           return DateTime.fromMillisecondsSinceEpoch(date);
         }
@@ -31,13 +31,13 @@ class DeadlineContainer extends StatelessWidget {
             ),
             if (deadline != null)
               Padding(
-                padding: const EdgeInsets.only(top: 4.0),
+                padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   DateFormatter.formatDate(deadline),
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      ?.copyWith(color: Const.kBlue),
+                      ?.copyWith(color: ConstStyles.kBlue),
                 ),
               ),
           ],

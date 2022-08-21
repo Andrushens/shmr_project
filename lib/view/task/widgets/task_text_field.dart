@@ -5,11 +5,12 @@ import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class TaskTextField extends StatefulWidget {
-  final String? initialText;
   const TaskTextField({
     required this.initialText,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final String? initialText;
 
   @override
   State<TaskTextField> createState() => _TaskTextFieldState();
@@ -28,17 +29,17 @@ class _TaskTextFieldState extends State<TaskTextField> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Const.kBackSecondary,
-        borderRadius: BorderRadius.circular(8.0),
+        color: ConstStyles.kBackSecondary,
+        borderRadius: BorderRadius.circular(8),
         boxShadow: const <BoxShadow>[
           BoxShadow(
-            color: Const.kLightGray,
+            color: ConstStyles.kLightGray,
             offset: Offset(0, 2),
-            blurRadius: 1.0,
+            blurRadius: 1,
           ),
         ],
       ),
-      margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 28.0),
+      margin: const EdgeInsets.fromLTRB(16, 16, 16, 28),
       child: TextField(
         controller: textController,
         onChanged: context.read<TaskCubit>().updateTaskText,
@@ -47,16 +48,13 @@ class _TaskTextFieldState extends State<TaskTextField> {
         style: Theme.of(context).textTheme.bodyText1,
         decoration: InputDecoration(
           border: const OutlineInputBorder(
-            borderSide: BorderSide(
-              width: 0,
-              style: BorderStyle.none,
-            ),
+            borderSide: BorderSide.none,
           ),
           hintText: S.current.whatToDo,
           hintStyle: Theme.of(context)
               .textTheme
               .bodyText1
-              ?.copyWith(color: Const.kLightGray),
+              ?.copyWith(color: ConstStyles.kLightGray),
         ),
       ),
     );

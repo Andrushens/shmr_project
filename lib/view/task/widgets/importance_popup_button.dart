@@ -6,7 +6,7 @@ import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class ImportancePopupButton extends StatelessWidget {
-  const ImportancePopupButton({Key? key}) : super(key: key);
+  const ImportancePopupButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class ImportancePopupButton extends StatelessWidget {
       (cubit) => localizedStringFromImportance(cubit.state.importance),
     );
     return PopupMenuButton(
-      elevation: 2.0,
+      elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,12 +27,12 @@ class ImportancePopupButton extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                ?.copyWith(color: Const.kLightGray),
+                ?.copyWith(color: ConstStyles.kLightGray),
           ),
         ],
       ),
       itemBuilder: (context) {
-        return <PopupMenuEntry>[
+        return <PopupMenuEntry<Text>>[
           PopupMenuItem(
             child: Text(
               S.current.no,
@@ -53,8 +53,8 @@ class ImportancePopupButton extends StatelessWidget {
           ),
           PopupMenuItem(
             padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 64.0,
+              left: 16,
+              right: 64,
             ),
             child: Text(
               '!! ${S.current.important}',

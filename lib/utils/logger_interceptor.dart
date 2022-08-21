@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:shmr/utils/const.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
-  final JsonEncoder encoder;
-  final int maxLength;
-
   LoggingInterceptor()
       : encoder = const JsonEncoder.withIndent('     '),
         maxLength = 2048;
+
+  final JsonEncoder encoder;
+  final int maxLength;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -18,8 +18,10 @@ class LoggingInterceptor extends InterceptorsWrapper {
     logger.d(
       '**** API Request Start****\n\n'
       '${options.method} ${options.uri}\n'
-      'Headers: ${formattedHeader.length > maxLength ? 'HUGE OUTPUT(${formattedHeader.length} symbols)' : formattedHeader}\n'
-      'Body: ${formattedBody.length > maxLength ? 'HUGE OUTPUT(${formattedBody.length} symbols)' : formattedBody}\n\n'
+      'Headers: ${formattedHeader.length > maxLength ? 
+      'HUGE OUTPUT(${formattedHeader.length} symbols)' : formattedHeader}\n'
+      'Body: ${formattedBody.length > maxLength ? 
+      'HUGE OUTPUT(${formattedBody.length} symbols)' : formattedBody}\n\n'
       '**** API Request End****',
     );
     handler.next(options);
@@ -38,13 +40,17 @@ class LoggingInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     final formattedData = encoder.convert(response.data);
     logger.i(
       '**** API Response Start ****\n\n'
       '${response.requestOptions.method} ${response.requestOptions.uri}\n'
       'Status code: ${response.statusCode}\n'
-      'Data: ${formattedData.length > maxLength ? 'HUGE OUTPUT(${formattedData.length} symbols)' : formattedData}\n\n'
+      'Data: ${formattedData.length > maxLength ? 
+      'HUGE OUTPUT(${formattedData.length} symbols)' : formattedData}\n\n'
       '**** API Response End****',
     );
     handler.next(response);

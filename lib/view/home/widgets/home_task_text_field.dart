@@ -5,9 +5,7 @@ import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 
 class HomeTaskTextField extends StatefulWidget {
-  const HomeTaskTextField({
-    Key? key,
-  }) : super(key: key);
+  const HomeTaskTextField({super.key});
 
   @override
   State<HomeTaskTextField> createState() => _HomeTaskTextFieldState();
@@ -42,7 +40,7 @@ class _HomeTaskTextFieldState extends State<HomeTaskTextField> {
         hintStyle: Theme.of(context)
             .textTheme
             .bodyText1
-            ?.copyWith(color: Const.kLightGray),
+            ?.copyWith(color: ConstStyles.kLightGray),
       ),
     );
   }

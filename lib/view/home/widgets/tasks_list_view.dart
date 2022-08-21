@@ -5,12 +5,12 @@ import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/task_tile.dart';
 
 class TasksListView extends StatelessWidget {
-  final List<Task> tasks;
-
   const TasksListView({
     required this.tasks,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+
+  final List<Task> tasks;
 
   @override
   Widget build(BuildContext context) {

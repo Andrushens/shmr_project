@@ -1,15 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
+import 'package:shmr/utils/failure.dart';
 import 'package:uuid/uuid.dart';
 
 part 'home_state.dart';
 part 'home_cubit.freezed.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final TasksRepository tasksRepository;
-
   HomeCubit({required this.tasksRepository})
       : super(
           const HomeState(
@@ -20,14 +22,20 @@ class HomeCubit extends Cubit<HomeState> {
           ),
         );
 
+  final TasksRepository tasksRepository;
+  final navigationService = locator<NavigationService>();
+
   Future<void> initTasks() async {
     (await tasksRepository.fetchTasks()).fold(
       (failure) {
-        //TODO emit error state
+        switch (failure.runtimeType) {
+          case ServerFailure:
+            break;
+        }
       },
       (tasks) {
-        var completedAmount = tasks.where((e) => e.done).length;
-        var displayTasks = tasks
+        final completedAmount = tasks.where((e) => e.done).length;
+        final displayTasks = tasks
             .where((e) => !e.done || e.done == state.displayCompleted)
             .toList();
         emit(
@@ -41,8 +49,8 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void changeDisplayCompleted(bool displayCompleted) {
-    var displayTasks = state.tasks
+  void changeDisplayCompleted({required bool displayCompleted}) {
+    final displayTasks = state.tasks
         .where((e) => !e.done || e.done == displayCompleted)
         .toList();
     emit(
@@ -54,8 +62,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> createTask({Task? task, String? value}) async {
-    var id = const Uuid().v4();
-    var newTask = task ??
+    final id = const Uuid().v4();
+    final newTask = task ??
         Task(
           id: id,
           text: value ?? id,
@@ -65,8 +73,8 @@ class HomeCubit extends Cubit<HomeState> {
           changedAt: 0,
           lastUpdatedBy: id,
         );
-    var tasks = List<Task>.from(state.tasks)..add(newTask);
-    var displayTasks = List<Task>.from(state.displayTasks)..add(newTask);
+    final tasks = List<Task>.from(state.tasks)..add(newTask);
+    final displayTasks = List<Task>.from(state.displayTasks)..add(newTask);
     emit(
       state.copyWith(
         tasks: tasks,
@@ -77,16 +85,16 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> deleteTask(String id) async {
-    var isDeleteDone = state.tasks.firstWhere((e) => e.id == id).done;
-    var tasks = List<Task>.from(state.tasks)
+    final isDeleteDone = state.tasks.firstWhere((e) => e.id == id).done;
+    final tasks = List<Task>.from(state.tasks)
       ..removeWhere(
         (e) => e.id == id,
       );
-    var displayTasks = List<Task>.from(state.displayTasks)
+    final displayTasks = List<Task>.from(state.displayTasks)
       ..removeWhere(
         (e) => e.id == id,
       );
-    var completedAmount = state.completedAmount - (isDeleteDone ? 1 : 0);
+    final completedAmount = state.completedAmount - (isDeleteDone ? 1 : 0);
     emit(
       state.copyWith(
         tasks: tasks,
@@ -98,16 +106,16 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> updateTask(Task task) async {
-    var indexToUpdate = state.tasks.indexWhere(
+    final indexToUpdate = state.tasks.indexWhere(
       (e) => e.id == task.id,
     );
-    var tasks = List<Task>.from(state.tasks);
+    final tasks = List<Task>.from(state.tasks);
     tasks[indexToUpdate] = task;
-    var indexToUpdateDisplayed = state.displayTasks.indexWhere(
+    final indexToUpdateDisplayed = state.displayTasks.indexWhere(
       (e) => e.id == task.id,
     );
-    var displayTasks = List<Task>.from(state.displayTasks);
-    var prevTask = displayTasks[indexToUpdateDisplayed];
+    final displayTasks = List<Task>.from(state.displayTasks);
+    final prevTask = displayTasks[indexToUpdateDisplayed];
     var completedAmount = state.completedAmount;
     if (prevTask.done != task.done) {
       if (task.done) {
@@ -134,22 +142,29 @@ class HomeCubit extends Cubit<HomeState> {
     await tasksRepository.updateTask(task);
   }
 
-  Future<void> updateTaskDone(String id, bool done) async {
-    var task = state.tasks.firstWhere((e) => e.id == id);
-    var updatedTask = task.copyWith(done: done);
-    updateTask(updatedTask);
+  Future<void> updateTaskDone(String id, {required bool done}) async {
+    final task = state.tasks.firstWhere((e) => e.id == id);
+    final updatedTask = task.copyWith(done: done);
+    await updateTask(updatedTask);
   }
 
-  Future<void> handleTaskPagePop(Task? task) async {
-    if (task == null) {
-      return;
+  Future<void> navigateToTaskPage([Task? task]) async {
+    final newTask = await navigationService.navigateTo(
+      Routes.taskPage,
+      data: task,
+    );
+    await _handleTaskPagePop(newTask);
+  }
+
+  Future<void> _handleTaskPagePop(dynamic task) async {
+    if (task is Task) {
+      if (task.isDeleted) {
+        return deleteTask(task.id);
+      }
+      if (state.tasks.any((e) => e.id == task.id)) {
+        return updateTask(task);
+      }
+      return createTask(task: task);
     }
-    if (task.isDeleted) {
-      return await deleteTask(task.id);
-    }
-    if (state.tasks.any((e) => e.id == task.id)) {
-      return await updateTask(task);
-    }
-    return await createTask(task: task);
   }
 }

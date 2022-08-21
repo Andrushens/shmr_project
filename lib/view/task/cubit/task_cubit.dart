@@ -36,8 +36,8 @@ class TaskCubit extends Cubit<TaskState> {
 
   void addTask() {
     if (state.text.isNotEmpty) {
-      var id = const Uuid().v4();
-      var newTask = Task(
+      final id = const Uuid().v4();
+      final newTask = Task(
         id: id,
         text: state.text,
         deadline: state.deadline,
@@ -56,7 +56,7 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   void deleteTask() {
-    var deletedTask = state.task?.copyWith(isDeleted: true);
+    final deletedTask = state.task?.copyWith(isDeleted: true);
     completeEditing(task: deletedTask);
   }
 

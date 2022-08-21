@@ -5,12 +5,12 @@ import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class DeleteContainer extends StatelessWidget {
-  final bool isAvailable;
-
   const DeleteContainer({
     required this.isAvailable,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
+  
+  final bool isAvailable;
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +21,21 @@ class DeleteContainer extends StatelessWidget {
             }
           : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               'assets/images/delete.png',
-              width: 16.0,
-              color: isAvailable ? Const.kRed : Const.kLightGray,
+              width: 16,
+              color: isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
             ),
-            const SizedBox(width: 14.0),
+            const SizedBox(width: 14),
             Text(
               S.current.delete,
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: isAvailable ? Const.kRed : Const.kLightGray,
+                    color:
+                        isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
                   ),
             ),
           ],

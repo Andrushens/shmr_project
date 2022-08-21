@@ -13,24 +13,24 @@ Importance importanceFromString(String value) {
   }
 }
 
-String stringFromImportance(Importance? value) {
+String stringFromImportance(Importance value) {
   switch (value) {
     case Importance.low:
       return 'low';
     case Importance.high:
       return 'important';
-    default:
+    case Importance.none:
       return 'basic';
   }
 }
 
-String localizedStringFromImportance(Importance? value) {
+String localizedStringFromImportance(Importance value) {
   switch (value) {
     case Importance.low:
       return S.current.low;
     case Importance.high:
       return S.current.important;
-    default:
+    case Importance.none:
       return S.current.basic;
   }
 }

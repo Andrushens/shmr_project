@@ -13,29 +13,28 @@ abstract class TasksRepository {
 }
 
 class TasksRepositoryImpl implements TasksRepository {
-  final RemoteSource remoteSource;
-  final LocalSource localSource;
-
   const TasksRepositoryImpl({
     required this.remoteSource,
     required this.localSource,
   });
 
+  final RemoteSource remoteSource;
+  final LocalSource localSource;
+
   @override
   Future<Either<Failure, List<Task>>> fetchTasks() async {
     try {
-      var tasks = await remoteSource.fetchTasks();
+      final tasks = await remoteSource.fetchTasks();
       await localSource.addTasksList(tasks);
       return Right(tasks);
     } catch (e) {
       logger.w('failed to fetch tasks remote: $e');
     }
     try {
-      var tasks = await localSource.fetchTasks();
+      final tasks = await localSource.fetchTasks();
       return Right(tasks);
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerFailure());
     }
   }
 
@@ -45,12 +44,10 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.addTask(task);
       await remoteSource.addTask(task);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerFailure());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerFailure());
     }
   }
 
@@ -60,12 +57,10 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.deleteTask(id);
       await remoteSource.deleteTask(id);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerFailure());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerFailure());
     }
   }
 
@@ -75,12 +70,10 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.updateTask(task);
       await remoteSource.updateTask(task);
       return const Right(true);
-    } on Failure {
-      //TODO handle exception
-      return Left(Failure());
+    } on ServerException {
+      return Left(ServerFailure());
     } catch (e) {
-      //TODO handle exception
-      return Left(Failure());
+      return Left(ServerFailure());
     }
   }
 }
