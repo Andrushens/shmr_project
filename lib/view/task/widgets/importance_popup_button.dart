@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/model/importance.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class ImportancePopupButton extends StatelessWidget {
@@ -27,7 +26,7 @@ class ImportancePopupButton extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                ?.copyWith(color: ConstStyles.kLightGray),
+                ?.copyWith(color: Theme.of(context).hintColor),
           ),
         ],
       ),
@@ -61,7 +60,7 @@ class ImportancePopupButton extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
-                  ?.copyWith(color: Theme.of(context).errorColor),
+                  ?.copyWith(color: Theme.of(context).highlightColor),
             ),
             onTap: () {
               context.read<TaskCubit>().updateImportance(Importance.high);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/date_formatter.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
@@ -34,15 +33,15 @@ class DeadlineContainer extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   DateFormatter.formatDate(deadline),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(color: ConstStyles.kBlue),
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                 ),
               ),
           ],
         ),
         Switch(
+          activeColor: Theme.of(context).colorScheme.primary,
           value: deadline != null,
           onChanged: (_) {
             showDatePicker(
@@ -56,9 +55,12 @@ class DeadlineContainer extends StatelessWidget {
               (value) => context.read<TaskCubit>().updateDeadline(value),
             );
           },
-          inactiveTrackColor: Colors.black.withOpacity(
-            0.06,
+          thumbColor: MaterialStateProperty.all(
+            deadline != null
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surface,
           ),
+          inactiveTrackColor: Theme.of(context).unselectedWidgetColor,
         ),
       ],
     );

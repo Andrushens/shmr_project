@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class TaskTextField extends StatefulWidget {
@@ -29,12 +28,12 @@ class _TaskTextFieldState extends State<TaskTextField> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ConstStyles.kBackSecondary,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: const <BoxShadow>[
+        boxShadow: <BoxShadow>[
           BoxShadow(
-            color: ConstStyles.kLightGray,
-            offset: Offset(0, 2),
+            color: Theme.of(context).shadowColor,
+            offset: const Offset(0, 2),
             blurRadius: 1,
           ),
         ],
@@ -54,7 +53,7 @@ class _TaskTextFieldState extends State<TaskTextField> {
           hintStyle: Theme.of(context)
               .textTheme
               .bodyText1
-              ?.copyWith(color: ConstStyles.kLightGray),
+              ?.copyWith(color: Theme.of(context).hintColor),
         ),
       ),
     );

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shake/shake.dart';
 import 'package:shmr/core/bootstrap.dart';
-import 'package:shmr/data/repository/tasks_repository.dart';
-import 'package:shmr/service/navigation/constants.dart';
-import 'package:shmr/service/navigation/navigation_service.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_flexible_space.dart';
 import 'package:shmr/view/home/widgets/home_task_text_field.dart';
 import 'package:shmr/view/home/widgets/tasks_list_view.dart';
+import 'package:shmr/view/theme/theme_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +22,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _taskTextController = TextEditingController();
+    ShakeDetector.autoStart(
+      onPhoneShake: () {
+        context.read<ThemeCubit>().changeTheme();
+      },
+      shakeCountResetTime: 500,
+    );
   }
 
   @override
@@ -39,7 +43,6 @@ class _HomePageState extends State<HomePage> {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            backgroundColor: ConstStyles.kBackPrimary,
             body: SafeArea(
               child: FutureBuilder(
                 future: context.read<HomeCubit>().initTasks(),
@@ -57,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                           SliverAppBar(
                             expandedHeight: 150,
                             pinned: true,
-                            backgroundColor: ConstStyles.kBackPrimary,
+                            backgroundColor: Colors.transparent,
                             flexibleSpace: CustomFlexibleSpace(
                               displayCompleted: state.displayCompleted,
                               completedAmount: state.completedAmount,
@@ -70,45 +73,33 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                               decoration: BoxDecoration(
-                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
-                                    offset: const Offset(-1, 0),
-                                    color: Colors.black.withOpacity(.2),
-                                    blurRadius: 1,
-                                  ),
-                                  BoxShadow(
-                                    offset: const Offset(1, 0),
-                                    color: Colors.black.withOpacity(.2),
-                                    blurRadius: 1,
-                                  ),
-                                  BoxShadow(
-                                    offset: const Offset(0, 1),
-                                    color: Colors.black.withOpacity(.2),
-                                    blurRadius: 1,
-                                  ),
-                                  const BoxShadow(
-                                    offset: Offset(0, -1),
-                                    color: Colors.white,
+                                    color: Theme.of(context).shadowColor,
+                                    offset: const Offset(0, 2),
                                     blurRadius: 1,
                                   ),
                                 ],
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Column(
-                                  children: [
-                                    TasksListView(tasks: state.displayTasks),
-                                    const Padding(
-                                      padding: EdgeInsets.only(
-                                        left: 54,
-                                        right: 64,
-                                        bottom: 18,
+                                child: ColoredBox(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TasksListView(tasks: state.displayTasks),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 54,
+                                          right: 64,
+                                          bottom: 18,
+                                        ),
+                                        child: HomeTaskTextField(),
                                       ),
-                                      child: HomeTaskTextField(),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

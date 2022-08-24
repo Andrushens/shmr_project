@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class TaskSliverAppBar extends StatelessWidget {
@@ -11,12 +10,13 @@ class TaskSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      backgroundColor: ConstStyles.kBackPrimary,
+      backgroundColor: Theme.of(context).primaryColor,
       leading: IconButton(
         onPressed: () => context.read<TaskCubit>().completeEditing(task: null),
         icon: Image.asset(
           'assets/images/close.png',
           width: 16,
+          color: Theme.of(context).colorScheme.onSecondary,
         ),
       ),
       actions: [
@@ -31,7 +31,7 @@ class TaskSliverAppBar extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText1
-                  ?.copyWith(color: ConstStyles.kBlue),
+                  ?.copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
         ),

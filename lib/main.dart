@@ -1,18 +1,22 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:shmr/core/application.dart';
 import 'package:shmr/core/bootstrap.dart';
-import 'package:shmr/data/data_source/local_source.dart';
-import 'package:shmr/data/data_source/remote_source.dart';
-import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/service/database_service.dart';
 import 'package:shmr/utils/color_extension.dart';
 import 'package:shmr/utils/const.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  runZonedGuarded(
+    () {},
+    (error, stack) {},
+  );
 
   await Firebase.initializeApp();
 

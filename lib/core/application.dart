@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shmr/core/bootstrap.dart';
 import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/service/navigation/awesome_router_delegate.dart';
 import 'package:shmr/service/navigation/constants.dart';
-import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
+import 'package:shmr/view/theme/theme_cubit.dart';
 import 'package:uni_links/uni_links.dart';
 
 class MyApp extends StatefulWidget {
@@ -64,24 +65,30 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: ConstStyles.themeData.copyWith(
-        errorColor: widget.importanceColor,
-        unselectedWidgetColor: widget.importanceColor,
+    return BlocProvider(
+      create: (context) => ThemeCubit(
+        importanceColor: widget.importanceColor,
       ),
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ru', 'RU'),
-        // Locale('en', 'US'),
-      ],
-      routeInformationParser: AwesomeRouteInformationParser(),
-      routerDelegate: AwesomeRouterDelegate(),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        builder: (context, state) {
+          return MaterialApp.router(
+            title: 'Flutter Demo',
+            theme: state,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('ru', 'RU'),
+              // Locale('en', 'US'),
+            ],
+            routeInformationParser: AwesomeRouteInformationParser(),
+            routerDelegate: AwesomeRouterDelegate(),
+          );
+        },
+      ),
     );
   }
 }

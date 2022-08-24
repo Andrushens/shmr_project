@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 
 class HomeTaskTextField extends StatefulWidget {
@@ -37,10 +36,9 @@ class _HomeTaskTextFieldState extends State<HomeTaskTextField> {
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: S.current.newTask,
-        hintStyle: Theme.of(context)
-            .textTheme
-            .bodyText1
-            ?.copyWith(color: ConstStyles.kLightGray),
+        hintStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+              color: Theme.of(context).hintColor,
+            ),
       ),
     );
   }

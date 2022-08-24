@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class DeleteContainer extends StatelessWidget {
@@ -9,7 +8,7 @@ class DeleteContainer extends StatelessWidget {
     required this.isAvailable,
     super.key,
   });
-  
+
   final bool isAvailable;
 
   @override
@@ -28,14 +27,17 @@ class DeleteContainer extends StatelessWidget {
             Image.asset(
               'assets/images/delete.png',
               width: 16,
-              color: isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
+              color: isAvailable
+                  ? Theme.of(context).errorColor
+                  : Theme.of(context).hintColor,
             ),
             const SizedBox(width: 14),
             Text(
               S.current.delete,
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color:
-                        isAvailable ? ConstStyles.kRed : ConstStyles.kLightGray,
+                    color: isAvailable
+                        ? Theme.of(context).errorColor
+                        : Theme.of(context).hintColor,
                   ),
             ),
           ],
