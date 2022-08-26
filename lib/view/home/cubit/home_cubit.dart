@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/service/navigation/constants.dart';

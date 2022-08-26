@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/service/navigation/awesome_router_delegate.dart';
 import 'package:shmr/service/navigation/constants.dart';

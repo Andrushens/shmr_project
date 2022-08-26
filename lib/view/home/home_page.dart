@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shake/shake.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_flexible_space.dart';
 import 'package:shmr/view/home/widgets/home_task_text_field.dart';

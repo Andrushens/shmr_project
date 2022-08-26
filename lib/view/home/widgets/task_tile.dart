@@ -71,7 +71,7 @@ class TaskTile extends StatelessWidget {
                 data: Theme.of(context).copyWith(
                   unselectedWidgetColor:
                       importanceFromString(task.importance) == Importance.high
-                          ? Theme.of(context).highlightColor
+                          ? Theme.of(context).colorScheme.surfaceVariant
                           : Theme.of(context).hintColor,
                 ),
                 child: Checkbox(
@@ -108,7 +108,9 @@ class TaskTile extends StatelessWidget {
                                   ?.copyWith(
                                     color: task.done
                                         ? Theme.of(context).hintColor
-                                        : Theme.of(context).highlightColor,
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .surfaceVariant,
                                   ),
                             ),
                           ),
@@ -124,7 +126,7 @@ class TaskTile extends StatelessWidget {
                               width: 10,
                               color: task.done
                                   ? Theme.of(context).hintColor
-                                  : Theme.of(context).unselectedWidgetColor,
+                                  : Theme.of(context).colorScheme.outline,
                             ),
                           ),
                         },

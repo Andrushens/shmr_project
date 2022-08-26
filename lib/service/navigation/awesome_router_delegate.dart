@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
 

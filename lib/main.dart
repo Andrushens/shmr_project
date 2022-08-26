@@ -1,22 +1,15 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:shmr/core/application.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/service/database_service.dart';
 import 'package:shmr/utils/color_extension.dart';
 import 'package:shmr/utils/const.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runZonedGuarded(
-    () {},
-    (error, stack) {},
-  );
 
   await Firebase.initializeApp();
 
@@ -42,9 +35,9 @@ void main() async {
   );
   final importanceColor = ColorEx.fromHex(colorString);
 
-  await DatabaseSrvice.init();
+  await DatabaseService.init();
 
-  bootstrap();
+  setupLocator();
 
   runApp(
     MyApp(

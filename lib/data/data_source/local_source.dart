@@ -13,7 +13,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      final tasks = await DatabaseSrvice.fetchTasks();
+      final tasks = await DatabaseService.fetchTasks();
       return tasks;
     } catch (e) {
       rethrow;
@@ -23,7 +23,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> addTask(Task task) async {
     try {
-      await DatabaseSrvice.addTask(task);
+      await DatabaseService.addTask(task);
     } catch (e) {
       rethrow;
     }
@@ -32,7 +32,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> deleteTask(String id) async {
     try {
-      await DatabaseSrvice.deleteTask(id);
+      await DatabaseService.deleteTask(id);
     } catch (e) {
       rethrow;
     }
@@ -41,7 +41,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> updateTask(Task task) async {
     try {
-      await DatabaseSrvice.updateTask(task);
+      await DatabaseService.updateTask(task);
     } catch (e) {
       rethrow;
     }
@@ -50,7 +50,7 @@ class LocalSourceImpl implements LocalSource {
   @override
   Future<void> addTasksList(List<Task> tasks) async {
     try {
-      await DatabaseSrvice.addTasksList(tasks);
+      await DatabaseService.addTasksList(tasks);
     } catch (e) {
       rethrow;
     }

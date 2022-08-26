@@ -7,7 +7,7 @@ import 'package:shmr/view/home/cubit/home_cubit.dart';
 
 final locator = GetIt.instance;
 
-void bootstrap() {
+void setupLocator() {
   final tasksRepository = TasksRepositoryImpl(
     remoteSource: RemoteSourceImpl(),
     localSource: LocalSourceImpl(),

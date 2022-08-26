@@ -57,10 +57,9 @@ class ImportancePopupButton extends StatelessWidget {
             ),
             child: Text(
               '!! ${S.current.important}',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(color: Theme.of(context).highlightColor),
+              style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                  ),
             ),
             onTap: () {
               context.read<TaskCubit>().updateImportance(Importance.high);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shmr/core/bootstrap.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
