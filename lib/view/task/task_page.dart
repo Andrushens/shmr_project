@@ -45,25 +45,40 @@ class TaskPage extends StatelessWidget {
                       children: [
                         TaskTextField(initialText: task?.text),
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            0,
+                            16,
+                            16,
+                          ),
                           child: ImportancePopupButton(),
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsetsDirectional.only(
+                            start: 16,
+                            end: 16,
+                          ),
                           child: Divider(),
                         ),
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            16,
+                            16,
+                            0,
+                          ),
                           child: DeadlineContainer(),
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 50),
+                          padding: EdgeInsetsDirectional.only(top: 50),
                           child: Divider(),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 11,
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            16,
+                            11,
+                            16,
+                            11,
                           ),
                           child: DeleteContainer(
                             isAvailable: task != null,

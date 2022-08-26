@@ -51,10 +51,7 @@ class ImportancePopupButton extends StatelessWidget {
             },
           ),
           PopupMenuItem(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 64,
-            ),
+            padding: const EdgeInsets.only(left: 16, right: 64),
             child: Text(
               '!! ${S.current.important}',
               style: Theme.of(context).textTheme.bodyText1?.copyWith(

@@ -30,7 +30,7 @@ class DeadlineContainer extends StatelessWidget {
             ),
             if (deadline != null)
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsetsDirectional.only(top: 4),
                 child: Text(
                   DateFormatter.formatDate(deadline),
                   style: Theme.of(context).textTheme.bodyText2?.copyWith(
@@ -43,17 +43,16 @@ class DeadlineContainer extends StatelessWidget {
         Switch(
           activeColor: Theme.of(context).colorScheme.primary,
           value: deadline != null,
-          onChanged: (_) {
-            showDatePicker(
+          onChanged: (_) async {
+            final futureDate = showDatePicker(
               context: context,
               initialDate: DateTime.now(),
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(
                 const Duration(days: 700),
               ),
-            ).then(
-              (value) => context.read<TaskCubit>().updateDeadline(value),
             );
+            context.read<TaskCubit>().updateDeadline(await futureDate);
           },
           thumbColor: MaterialStateProperty.all(
             deadline != null

@@ -28,9 +28,11 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<List<Task>> fetchTasks() async {
     try {
-      final response = await dio.get(ConstRemote.fetchTasksPath);
-      final data = response.data as Map<String, dynamic>;
-      if (data[ConstRemote.statusField] == 'ok') {
+      final response = await dio.get<Map<String, dynamic>>(
+        ConstRemote.fetchTasksPath,
+      );
+      final data = response.data;
+      if (data != null && data[ConstRemote.statusField] == 'ok') {
         final revision = data[ConstRemote.revisionField];
         dio.options.headers[ConstRemote.revisionHeader] = revision;
         final jsonList = data[ConstRemote.listField] as List<dynamic>;
@@ -50,14 +52,14 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> addTask(Task task) async {
     try {
-      final response = await dio.post(
+      final response = await dio.post<Map<String, dynamic>>(
         ConstRemote.addTaskPath,
         data: {
           ConstRemote.elementField: task.toJson(),
         },
       );
-      final data = response.data as Map<String, dynamic>;
-      if (data[ConstRemote.statusField] == 'ok') {
+      final data = response.data;
+      if (data != null && data[ConstRemote.statusField] == 'ok') {
         final revision = data[ConstRemote.revisionField];
         dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {
@@ -71,11 +73,11 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> deleteTask(String id) async {
     try {
-      final response = await dio.delete(
+      final response = await dio.delete<Map<String, dynamic>>(
         ConstRemote.deleteTaskPath(id),
       );
-      final data = response.data as Map<String, dynamic>;
-      if (data[ConstRemote.statusField] == 'ok') {
+      final data = response.data;
+      if (data != null && data[ConstRemote.statusField] == 'ok') {
         final revision = data[ConstRemote.revisionField];
         dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {
@@ -89,14 +91,14 @@ class RemoteSourceImpl implements RemoteSource {
   @override
   Future<void> updateTask(Task task) async {
     try {
-      final response = await dio.put(
+      final response = await dio.put<Map<String, dynamic>>(
         ConstRemote.updateTaskPath(task.id),
         data: {
           ConstRemote.elementField: task.toJson(),
         },
       );
-      final data = response.data as Map<String, dynamic>;
-      if (data[ConstRemote.statusField] == 'ok') {
+      final data = response.data;
+      if (data != null && data[ConstRemote.statusField] == 'ok') {
         final revision = data[ConstRemote.revisionField];
         dio.options.headers[ConstRemote.revisionHeader] = revision;
       } else {

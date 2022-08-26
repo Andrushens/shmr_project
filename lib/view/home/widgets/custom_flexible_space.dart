@@ -31,7 +31,7 @@ class CustomFlexibleSpace extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding: EdgeInsets.only(
+                padding: EdgeInsetsDirectional.only(
                   bottom: Tween<double>(
                     begin: 0,
                     end: 16,
@@ -40,7 +40,7 @@ class CustomFlexibleSpace extends StatelessWidget {
                 child: Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
+                      padding: EdgeInsetsDirectional.only(
                         bottom: Tween<double>(
                           begin: 0,
                           end: 24,
@@ -89,9 +89,7 @@ class CustomFlexibleSpace extends StatelessWidget {
                           ).evaluate(animation),
                         ),
                         child: Opacity(
-                          opacity: 1 - ((1 - animation.value) * 2.5) <= 0
-                              ? 0
-                              : 1 - ((1 - animation.value) * 2.5),
+                          opacity: _getOpacity(animation.value),
                           child: Text(
                             S.current.doneAmount(completedAmount),
                             style: Theme.of(context)
@@ -134,5 +132,9 @@ class CustomFlexibleSpace extends StatelessWidget {
     final expandRatio =
         (constraints.biggest.height - minHeight) / (maxHeight - minHeight);
     return expandRatio;
+  }
+
+  double _getOpacity(double value) {
+    return 1 - ((1 - value) * 2.5) <= 0 ? 0 : 1 - ((1 - value) * 2.5);
   }
 }

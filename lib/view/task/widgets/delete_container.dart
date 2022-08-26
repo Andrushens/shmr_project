@@ -20,7 +20,7 @@ class DeleteContainer extends StatelessWidget {
             }
           : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsetsDirectional.only(top: 12, bottom: 12),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

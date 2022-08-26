@@ -71,7 +71,12 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SliverToBoxAdapter(
                             child: Container(
-                              margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                              margin: const EdgeInsetsDirectional.fromSTEB(
+                                8,
+                                0,
+                                8,
+                                8,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: <BoxShadow>[
@@ -91,9 +96,9 @@ class _HomePageState extends State<HomePage> {
                                     children: [
                                       TasksListView(tasks: state.displayTasks),
                                       const Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 54,
-                                          right: 64,
+                                        padding: EdgeInsetsDirectional.only(
+                                          start: 54,
+                                          end: 64,
                                           bottom: 18,
                                         ),
                                         child: HomeTaskTextField(),

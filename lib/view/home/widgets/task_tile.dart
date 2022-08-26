@@ -34,7 +34,7 @@ class TaskTile extends StatelessWidget {
         }
       },
       secondaryBackground: Container(
-        padding: const EdgeInsets.only(right: 24),
+        padding: const EdgeInsetsDirectional.only(end: 24),
         color: Theme.of(context).errorColor,
         alignment: Alignment.centerRight,
         child: Image.asset(
@@ -45,7 +45,7 @@ class TaskTile extends StatelessWidget {
         ),
       ),
       background: Container(
-        padding: const EdgeInsets.only(left: 24),
+        padding: const EdgeInsetsDirectional.only(start: 24),
         color: Theme.of(context).selectedRowColor,
         alignment: Alignment.centerLeft,
         child: Image.asset(
@@ -56,10 +56,7 @@ class TaskTile extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 14,
-          horizontal: 20,
-        ),
+        padding: const EdgeInsetsDirectional.fromSTEB(20, 14, 20, 14),
         color: Theme.of(context).colorScheme.surface,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +96,7 @@ class TaskTile extends StatelessWidget {
                         if (importanceFromString(task.importance) ==
                             Importance.high) ...{
                           Padding(
-                            padding: const EdgeInsets.only(right: 4),
+                            padding: const EdgeInsetsDirectional.only(end: 4),
                             child: Text(
                               '!!',
                               style: Theme.of(context)
@@ -117,8 +114,8 @@ class TaskTile extends StatelessWidget {
                         } else if (importanceFromString(task.importance) ==
                             Importance.low) ...{
                           Padding(
-                            padding: const EdgeInsets.only(
-                              right: 4,
+                            padding: const EdgeInsetsDirectional.only(
+                              end: 4,
                               top: 4,
                             ),
                             child: Image.asset(
@@ -150,7 +147,7 @@ class TaskTile extends StatelessWidget {
                     ),
                     if (date != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsetsDirectional.only(top: 4),
                         child: Text(
                           DateFormatter.formatDate(date),
                           style: Theme.of(context)
@@ -168,7 +165,7 @@ class TaskTile extends StatelessWidget {
               width: 20,
               height: 20,
               child: IconButton(
-                padding: EdgeInsets.zero,
+                padding: EdgeInsetsDirectional.zero,
                 onPressed: () async {
                   await context.read<HomeCubit>().navigateToTaskPage(task);
                 },

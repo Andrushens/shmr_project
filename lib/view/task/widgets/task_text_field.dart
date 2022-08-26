@@ -38,7 +38,7 @@ class _TaskTextFieldState extends State<TaskTextField> {
           ),
         ],
       ),
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+      margin: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 28),
       child: TextField(
         controller: textController,
         onChanged: context.read<TaskCubit>().updateTaskText,
