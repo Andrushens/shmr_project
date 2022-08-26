@@ -18,12 +18,36 @@ class SharedProvider {
       value: isDarkMode,
     );
   }
+
+  static int getAndroidSdkVersionInt() {
+    return _sharedHelper.getInt(
+      ConstPreferences.androidSdkVersionKey,
+      defaultValue: 0,
+    );
+  }
+
+  static Future<void> setAndroidSdkVersion({
+    required int androidSdkVersion,
+  }) async {
+    await _sharedHelper.setInt(
+      ConstPreferences.androidSdkVersionKey,
+      value: androidSdkVersion,
+    );
+  }
 }
 
 class SharedHelper {
   SharedHelper(this._prefs);
 
   final SharedPreferences _prefs;
+
+  Future<void> setInt(String key, {required int value}) async {
+    await _prefs.setInt(key, value);
+  }
+
+  int getInt(String key, {required int defaultValue}) {
+    return _prefs.getInt(key) ?? defaultValue;
+  }
 
   Future<void> setBool(String key, {required bool value}) async {
     await _prefs.setBool(key, value);

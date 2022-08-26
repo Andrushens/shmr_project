@@ -9,6 +9,7 @@ import 'package:shmr/service/navigation/awesome_router_delegate.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
+import 'package:shmr/view/home/widgets/custom_scroll_behavior.dart';
 import 'package:shmr/view/theme/theme_cubit.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -74,6 +75,7 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp.router(
             title: 'Flutter Demo',
             theme: state,
+            scrollBehavior: CustomScrollBehavior(),
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,

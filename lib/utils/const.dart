@@ -61,4 +61,5 @@ class ConstRemote {
 
 class ConstPreferences {
   static const darkModeKey = 'dark_mode_key';
+  static const androidSdkVersionKey = 'android_sdk_version_key';
 }
