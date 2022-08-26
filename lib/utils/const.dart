@@ -58,3 +58,7 @@ class ConstRemote {
   static const statusField = 'status';
   static const listField = 'list';
 }
+
+class ConstPreferences {
+  static const darkModeKey = 'dark_mode_key';
+}

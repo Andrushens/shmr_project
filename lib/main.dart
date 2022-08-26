@@ -37,7 +37,7 @@ Future<void> main() async {
 
   await DatabaseService.init();
 
-  setupLocator();
+  await setupLocator();
 
   runApp(
     MyApp(

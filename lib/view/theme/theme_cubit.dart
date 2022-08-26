@@ -1,11 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shmr/service/shared_provider.dart';
 import 'package:shmr/view/theme/theme.dart';
 
 class ThemeCubit extends Cubit<ThemeData> {
   ThemeCubit({required this.importanceColor})
       : super(
-          getDarkTheme(importanceColor: importanceColor),
+          SharedProvider.getIsDarkModeTheme()
+              ? getDarkTheme(importanceColor: importanceColor)
+              : getLightTheme(importanceColor: importanceColor),
         );
 
   final Color importanceColor;
@@ -15,7 +18,8 @@ class ThemeCubit extends Cubit<ThemeData> {
 
   bool get isDarkMode => state.brightness == Brightness.dark;
 
-  void changeTheme() {
+  Future<void> changeTheme() async {
+    await SharedProvider.setIsDarkModeTheme(isDarkMode: !isDarkMode);
     emit(isDarkMode ? lightTheme : darkTheme);
   }
 }

@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _taskTextController = TextEditingController();
     ShakeDetector.autoStart(
-      onPhoneShake: () {
-        context.read<ThemeCubit>().changeTheme();
+      onPhoneShake: () async {
+        await context.read<ThemeCubit>().changeTheme();
       },
       shakeCountResetTime: 500,
     );
