@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart' show Either, Left, Right;
+import 'package:dio/dio.dart';
 import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
 import 'package:shmr/model/task/task.dart';
@@ -24,30 +25,39 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Either<Failure, List<Task>>> fetchTasks() async {
     try {
-      final tasks = await remoteSource.fetchTasks();
-      await localSource.addTasksList(tasks);
+      final tasksMaps = await remoteSource.fetchTasks();
+      final tasks = tasksMaps.map(Task.fromJson).toList();
+      try {
+        await localSource.addTasksList(tasksMaps);
+      } catch (e) {
+        logger.w('failed to save tasks local: $e');
+      }
       return Right(tasks);
+    } on DioError catch (e) {
+      logger.w('failed to fetch tasks remote: ${e.message}');
     } catch (e) {
       logger.w('failed to fetch tasks remote: $e');
     }
     try {
-      final tasks = await localSource.fetchTasks();
+      final tasksMaps = await localSource.fetchTasks();
+      final tasks = tasksMaps.map(Task.fromJson).toList();
       return Right(tasks);
     } catch (e) {
-      return Left(ServerFailure());
+      logger.w('failed to fetch tasks local: $e');
+      return const Left(ServerFailure());
     }
   }
 
   @override
   Future<Either<Failure, bool>> addTask(Task task) async {
     try {
-      await localSource.addTask(task);
-      await remoteSource.addTask(task);
+      await localSource.addTask(task.toJson());
+      await remoteSource.addTask(task.toJson());
       return const Right(true);
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 
@@ -58,22 +68,22 @@ class TasksRepositoryImpl implements TasksRepository {
       await remoteSource.deleteTask(id);
       return const Right(true);
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 
   @override
   Future<Either<Failure, bool>> updateTask(Task task) async {
     try {
-      await localSource.updateTask(task);
-      await remoteSource.updateTask(task);
+      await localSource.updateTask(task.id, task.toJson());
+      await remoteSource.updateTask(task.id, task.toJson());
       return const Right(true);
     } on ServerException {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 }

@@ -7,7 +7,6 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:shmr/core/application.dart';
 import 'package:shmr/core/setup_locator.dart';
-import 'package:shmr/service/database_service.dart';
 import 'package:shmr/service/shared_provider.dart';
 import 'package:shmr/utils/color_extension.dart';
 import 'package:shmr/utils/const.dart';
@@ -40,8 +39,6 @@ Future<void> main() async {
   final importanceColor = ColorEx.fromHex(colorString);
 
   await setupLocator();
-
-  await DatabaseService.init();
 
   if (Platform.isAndroid) {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
