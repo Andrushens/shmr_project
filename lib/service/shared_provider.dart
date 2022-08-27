@@ -34,6 +34,34 @@ class SharedProvider {
       value: androidSdkVersion,
     );
   }
+
+  static int getLocalRevision() {
+    return _sharedHelper.getInt(
+      ConstPreferences.revisionLocalKey,
+      defaultValue: 0,
+    );
+  }
+
+  static Future<void> setLocalRevision({required int revision}) async {
+    await _sharedHelper.setInt(
+      ConstPreferences.revisionLocalKey,
+      value: revision,
+    );
+  }
+
+  static int getRemoteRevision() {
+    return _sharedHelper.getInt(
+      ConstPreferences.revisionRemoteKey,
+      defaultValue: 0,
+    );
+  }
+
+  static Future<void> setRemoteRevision({required int revision}) async {
+    await _sharedHelper.setInt(
+      ConstPreferences.revisionRemoteKey,
+      value: revision,
+    );
+  }
 }
 
 class SharedHelper {

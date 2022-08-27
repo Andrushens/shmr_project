@@ -7,7 +7,7 @@ abstract class LocalSource {
   Future<void> addTask(Task task);
   Future<void> deleteTask(String id);
   Future<void> updateTask(Task task);
-  Future<void> addTasksList(List<Task> tasks);
+  Future<void> saveTasks(List<Task> tasks);
 }
 
 class LocalSourceImpl implements LocalSource {
@@ -63,7 +63,8 @@ class LocalSourceImpl implements LocalSource {
   }
 
   @override
-  Future<void> addTasksList(List<Task> tasks) async {
+  Future<void> saveTasks(List<Task> tasks) async {
+    await database.delete(ConstLocal.tasksTableName);
     final batch = database.batch();
     for (final task in tasks) {
       final taskMap = task.toJson();

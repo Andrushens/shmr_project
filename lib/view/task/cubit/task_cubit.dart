@@ -52,7 +52,10 @@ class TaskCubit extends Cubit<TaskState> {
   }
 
   void updateTask(Task task) {
-    completeEditing(task: task);
+    final updatedTask = task.copyWith(
+      changedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+    completeEditing(task: updatedTask);
   }
 
   void deleteTask() {

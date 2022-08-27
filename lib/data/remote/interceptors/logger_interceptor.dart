@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shmr/utils/const.dart';
 
-class LoggingInterceptor extends InterceptorsWrapper {
+class LoggingInterceptor implements InterceptorsWrapper {
   LoggingInterceptor()
       : encoder = const JsonEncoder.withIndent('     '),
         maxLength = 2048;

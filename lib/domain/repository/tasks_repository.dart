@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart' show Either, Left, Right;
-import 'package:shmr/data/data_source/local_source.dart';
-import 'package:shmr/data/data_source/remote_source.dart';
+import 'package:shmr/data/local/local_source.dart';
+import 'package:shmr/data/remote/remote_source.dart';
 import 'package:shmr/domain/model/failure.dart';
 import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/service/analytics_provider.dart';
@@ -31,19 +31,19 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Either<Failure, List<Task>>> fetchTasks() async {
     try {
-      final tasks = await remoteSource.fetchTasks();
+      final backendTasks = await remoteSource.fetchTasks();
       try {
-        await localSource.addTasksList(tasks);
+        await localSource.saveTasks(backendTasks);
       } catch (e) {
         logger.w('failed to save tasks local: $e');
       }
-      return Right(tasks);
+      return Right(backendTasks);
     } catch (_) {
       logger.w('failed to fetch tasks remote');
     }
     try {
-      final tasks = await localSource.fetchTasks();
-      return Right(tasks);
+      final dbTasks = await localSource.fetchTasks();
+      return Right(dbTasks);
     } catch (e) {
       logger.w('failed to fetch tasks local: $e');
       return Left(DatabaseFailure());

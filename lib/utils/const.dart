@@ -50,6 +50,7 @@ class ConstRemote {
   static const baseUrl = 'https://beta.mrdekk.ru/todobackend/';
 
   static const fetchTasksPath = 'list';
+  static const patchTasksPath = 'list';
   static const addTaskPath = 'list';
   static String deleteTaskPath(String taskId) => 'list/$taskId';
   static String updateTaskPath(String taskId) => 'list/$taskId';
@@ -58,9 +59,14 @@ class ConstRemote {
   static const elementField = 'element';
   static const statusField = 'status';
   static const listField = 'list';
+
+  static const methodPatch = 'PATCH';
+  static const methodGet = 'GET';
 }
 
 class ConstPreferences {
   static const darkModeKey = 'dark_mode_key';
   static const androidSdkVersionKey = 'android_sdk_version_key';
+  static const revisionLocalKey = 'revision_local_key';
+  static const revisionRemoteKey = 'revision_remote_key';
 }
