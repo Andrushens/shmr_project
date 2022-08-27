@@ -1,23 +1,19 @@
 class RouteNotExistsException implements Exception {}
 
 class ServerException implements Exception {
-  const ServerException([this.message]);
-  final String? message;
+  const ServerException(this.message);
+  final String message;
+
+  @override
+  String toString() {
+    return message;
+  }
 }
 
-class Failure {
-  const Failure([this.message]);
-  final String? message;
-}
+class Failure {}
 
-class ServerFailure extends Failure {
-  const ServerFailure([super.message]);
-}
+class ServerFailure extends Failure {}
 
-class DatabaseFailure extends Failure {
-  const DatabaseFailure([super.message]);
-}
+class DatabaseFailure extends Failure {}
 
-class ConnectivityFailure extends Failure {
-  const ConnectivityFailure([super.message]);
-}
+class ConnectivityFailure extends Failure {}

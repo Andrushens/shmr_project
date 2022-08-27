@@ -43,7 +43,7 @@ class RemoteSourceImpl implements RemoteSource {
           .toList();
       return resList;
     } else {
-      throw const ServerException();
+      throw const ServerException('Invalid response exception');
     }
   }
 
@@ -57,7 +57,7 @@ class RemoteSourceImpl implements RemoteSource {
     );
     final data = response.data;
     if (data == null || data[ConstRemote.statusField] != 'ok') {
-      throw const ServerException();
+      throw const ServerException('Invalid response exception');
     }
   }
 
@@ -68,7 +68,7 @@ class RemoteSourceImpl implements RemoteSource {
     );
     final data = response.data;
     if (data == null || data[ConstRemote.statusField] != 'ok') {
-      throw const ServerException();
+      throw const ServerException('Invalid response exception');
     }
   }
 
@@ -82,7 +82,7 @@ class RemoteSourceImpl implements RemoteSource {
     );
     final data = response.data;
     if (data == null || data[ConstRemote.statusField] != 'ok') {
-      throw const ServerException();
+      throw const ServerException('Invalid response exception');
     }
   }
 }

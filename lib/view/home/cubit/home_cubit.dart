@@ -200,7 +200,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void _handleFailure(Failure failure) {
     final currentErrorsAmount = state.errorsInRowAmount + 1;
-    final shouldShowError = (currentErrorsAmount % 3) == 1;
+    final shouldShowError = currentErrorsAmount % 3 == 1;
     switch (failure.runtimeType) {
       case ServerFailure:
         emit(

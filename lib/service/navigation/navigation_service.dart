@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shmr/domain/model/task/task.dart';
+import 'package:shmr/service/analytics_provider.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/view/home/home_page.dart';
 import 'package:shmr/view/task/task_page.dart';
 
 class NavigationService extends ChangeNotifier {
+  NavigationService(this.analyticsprovider);
+
+  final AnalyticsProvider analyticsprovider;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   List<PageDef> get pageDefs => List.unmodifiable(_pageDefs);
@@ -30,10 +34,12 @@ class NavigationService extends ChangeNotifier {
   Future<dynamic> setNewRoutePath(RouteDef routeDef) async {
     switch (routeDef.path) {
       case Routes.homePage:
+        await analyticsprovider.logEvent(AnalyticsEvent.onHomePage);
         _pageDefs.removeWhere((e) => e.page.name != Routes.homePage);
         notifyListeners();
         break;
       case Routes.taskPage:
+        await analyticsprovider.logEvent(AnalyticsEvent.onTaskPage);
         final completer = Completer<Task?>();
         final page = MaterialPage<dynamic>(
           child: TaskPage(
