@@ -2,14 +2,15 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/data/repository/tasks_repository.dart';
+import 'package:shmr/model/error_type.dart';
+import 'package:shmr/model/failure.dart';
 import 'package:shmr/model/task/task.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
-import 'package:shmr/utils/failure.dart';
 import 'package:uuid/uuid.dart';
 
-part 'home_state.dart';
 part 'home_cubit.freezed.dart';
+part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({required this.tasksRepository})
@@ -17,8 +18,6 @@ class HomeCubit extends Cubit<HomeState> {
           const HomeState(
             tasks: [],
             displayTasks: [],
-            completedAmount: 0,
-            displayCompleted: true,
           ),
         );
 
@@ -27,12 +26,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> initTasks() async {
     (await tasksRepository.fetchTasks()).fold(
-      (failure) {
-        switch (failure.runtimeType) {
-          case ServerFailure:
-            break;
-        }
-      },
+      (_) {},
       (tasks) {
         final completedAmount = tasks.where((e) => e.done).length;
         final displayTasks = tasks
@@ -75,13 +69,25 @@ class HomeCubit extends Cubit<HomeState> {
         );
     final tasks = List<Task>.from(state.tasks)..add(newTask);
     final displayTasks = List<Task>.from(state.displayTasks)..add(newTask);
+
     emit(
       state.copyWith(
         tasks: tasks,
         displayTasks: displayTasks,
+        shouldShowError: false,
       ),
     );
-    await tasksRepository.addTask(newTask);
+    (await tasksRepository.addTask(newTask)).fold(
+      _handleFailure,
+      (_) {
+        emit(
+          state.copyWith(
+            errorType: ErrorType.none,
+            errorsInRowAmount: 0,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> deleteTask(String id) async {
@@ -95,14 +101,26 @@ class HomeCubit extends Cubit<HomeState> {
         (e) => e.id == id,
       );
     final completedAmount = state.completedAmount - (isDeleteDone ? 1 : 0);
+
     emit(
       state.copyWith(
         tasks: tasks,
         completedAmount: completedAmount,
         displayTasks: displayTasks,
+        shouldShowError: false,
       ),
     );
-    await tasksRepository.deleteTask(id);
+    (await tasksRepository.deleteTask(id)).fold(
+      _handleFailure,
+      (_) {
+        emit(
+          state.copyWith(
+            errorType: ErrorType.none,
+            errorsInRowAmount: 0,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> updateTask(Task task) async {
@@ -132,14 +150,26 @@ class HomeCubit extends Cubit<HomeState> {
     } else {
       displayTasks[indexToUpdateDisplayed] = task;
     }
+
     emit(
       state.copyWith(
         tasks: tasks,
         displayTasks: displayTasks,
         completedAmount: completedAmount,
+        shouldShowError: false,
       ),
     );
-    await tasksRepository.updateTask(task);
+    (await tasksRepository.updateTask(task)).fold(
+      _handleFailure,
+      (_) {
+        emit(
+          state.copyWith(
+            errorType: ErrorType.none,
+            errorsInRowAmount: 0,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> updateTaskDone(String id, {required bool done}) async {
@@ -165,6 +195,41 @@ class HomeCubit extends Cubit<HomeState> {
         return updateTask(task);
       }
       return createTask(task: task);
+    }
+  }
+
+  void _handleFailure(Failure failure) {
+    final currentErrorsAmount = state.errorsInRowAmount + 1;
+    final shouldShowError = currentErrorsAmount % 3 == 1;
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        emit(
+          state.copyWith(
+            errorType: ErrorType.server,
+            errorsInRowAmount: currentErrorsAmount,
+            shouldShowError: shouldShowError,
+          ),
+        );
+        break;
+      case ConnectivityFailure:
+        emit(
+          state.copyWith(
+            errorType: ErrorType.connectivity,
+            errorsInRowAmount: currentErrorsAmount,
+            shouldShowError: shouldShowError,
+          ),
+        );
+        break;
+      case DatabaseFailure:
+        emit(
+          state.copyWith(
+            errorType: ErrorType.database,
+            errorsInRowAmount: currentErrorsAmount,
+            shouldShowError: shouldShowError,
+          ),
+        );
+        break;
+      default:
     }
   }
 }

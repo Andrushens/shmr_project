@@ -23,5 +23,9 @@
     "september": "сентября",
     "october": "октября",
     "november": "ноября",
-    "december": "декабря"
+    "december": "декабря",
+
+    "connectivityFailureTitle": "Ошибка подключения",
+    "serverFailureTitle": "Ошибка сервера",
+    "databaseFailureTitle": "Ошибка базы данных"
 }

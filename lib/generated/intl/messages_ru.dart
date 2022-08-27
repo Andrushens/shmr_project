@@ -28,6 +28,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "august": MessageLookupByLibrary.simpleMessage("августа"),
         "basic": MessageLookupByLibrary.simpleMessage("Нет"),
         "completeTill": MessageLookupByLibrary.simpleMessage("Сделать до"),
+        "connectivityFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Ошибка подключения"),
+        "databaseFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Ошибка базы данных"),
         "december": MessageLookupByLibrary.simpleMessage("декабря"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "doneAmount": m0,
@@ -47,6 +51,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "october": MessageLookupByLibrary.simpleMessage("октября"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "september": MessageLookupByLibrary.simpleMessage("сентября"),
+        "serverFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Ошибка сервера"),
         "whatToDo": MessageLookupByLibrary.simpleMessage("Что надо сделать...")
       };
 }

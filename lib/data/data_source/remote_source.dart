@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:shmr/model/failure.dart';
 import 'package:shmr/utils/const.dart';
-import 'package:shmr/utils/failure.dart';
 import 'package:shmr/utils/logger_interceptor.dart';
 import 'package:shmr/utils/revision_interceptor.dart';
 

@@ -289,6 +289,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Connection failure`
+  String get connectivityFailureTitle {
+    return Intl.message(
+      'Connection failure',
+      name: 'connectivityFailureTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server failure`
+  String get serverFailureTitle {
+    return Intl.message(
+      'Server failure',
+      name: 'serverFailureTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Database failure`
+  String get databaseFailureTitle {
+    return Intl.message(
+      'Database failure',
+      name: 'databaseFailureTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart' show Either, Left, Right;
-import 'package:dio/dio.dart';
 import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
+import 'package:shmr/model/failure.dart';
 import 'package:shmr/model/task/task.dart';
+import 'package:shmr/service/connecitivty_status_provider.dart';
 import 'package:shmr/utils/const.dart';
-import 'package:shmr/utils/failure.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 abstract class TasksRepository {
   Future<Either<Failure, List<Task>>> fetchTasks();
@@ -17,10 +18,12 @@ class TasksRepositoryImpl implements TasksRepository {
   const TasksRepositoryImpl({
     required this.remoteSource,
     required this.localSource,
+    required this.connectivityProvider,
   });
 
   final RemoteSource remoteSource;
   final LocalSource localSource;
+  final ConnectivityProvider connectivityProvider;
 
   @override
   Future<Either<Failure, List<Task>>> fetchTasks() async {
@@ -33,10 +36,8 @@ class TasksRepositoryImpl implements TasksRepository {
         logger.w('failed to save tasks local: $e');
       }
       return Right(tasks);
-    } on DioError catch (e) {
-      logger.w('failed to fetch tasks remote: ${e.message}');
-    } catch (e) {
-      logger.w('failed to fetch tasks remote: $e');
+    } catch (_) {
+      logger.w('failed to fetch tasks remote');
     }
     try {
       final tasksMaps = await localSource.fetchTasks();
@@ -44,7 +45,7 @@ class TasksRepositoryImpl implements TasksRepository {
       return Right(tasks);
     } catch (e) {
       logger.w('failed to fetch tasks local: $e');
-      return const Left(ServerFailure());
+      return const Left(DatabaseFailure());
     }
   }
 
@@ -54,9 +55,18 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.addTask(task.toJson());
       await remoteSource.addTask(task.toJson());
       return const Right(true);
-    } on ServerException {
+    } on ServerException catch (_) {
+      logger.w('failed to add task remote');
       return const Left(ServerFailure());
+    } on DatabaseException catch (e) {
+      logger.w('failed to add task local: $e');
+      return const Left(DatabaseFailure());
     } catch (e) {
+      if (!(await connectivityProvider.isConnected)) {
+        logger.w('failed to add task: Connectivity failure');
+        return const Left(ConnectivityFailure());
+      }
+      logger.w('failed to add task');
       return const Left(ServerFailure());
     }
   }
@@ -67,9 +77,18 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.deleteTask(id);
       await remoteSource.deleteTask(id);
       return const Right(true);
-    } on ServerException {
+    } on ServerException catch (_) {
+      logger.w('failed to delete task remote');
       return const Left(ServerFailure());
+    } on DatabaseException catch (e) {
+      logger.w('failed to delete task local: $e');
+      return const Left(DatabaseFailure());
     } catch (e) {
+      if (!(await connectivityProvider.isConnected)) {
+        logger.w('failed to delete task: Connectivity failure');
+        return const Left(ConnectivityFailure());
+      }
+      logger.w('failed to delete task');
       return const Left(ServerFailure());
     }
   }
@@ -80,9 +99,18 @@ class TasksRepositoryImpl implements TasksRepository {
       await localSource.updateTask(task.id, task.toJson());
       await remoteSource.updateTask(task.id, task.toJson());
       return const Right(true);
-    } on ServerException {
+    } on ServerException catch (_) {
+      logger.w('failed to update task remote');
       return const Left(ServerFailure());
+    } on DatabaseException catch (e) {
+      logger.w('failed to update task local: $e');
+      return const Left(DatabaseFailure());
     } catch (e) {
+      if (!(await connectivityProvider.isConnected)) {
+        logger.w('failed to update task: Connectivity failure');
+        return const Left(ConnectivityFailure());
+      }
+      logger.w('failed to update task');
       return const Left(ServerFailure());
     }
   }

@@ -28,6 +28,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "august": MessageLookupByLibrary.simpleMessage("august"),
         "basic": MessageLookupByLibrary.simpleMessage("No"),
         "completeTill": MessageLookupByLibrary.simpleMessage("Complete till"),
+        "connectivityFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Connection failure"),
+        "databaseFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Database failure"),
         "december": MessageLookupByLibrary.simpleMessage("december"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "doneAmount": m0,
@@ -47,6 +51,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "october": MessageLookupByLibrary.simpleMessage("october"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "september": MessageLookupByLibrary.simpleMessage("september"),
+        "serverFailureTitle":
+            MessageLookupByLibrary.simpleMessage("Server failure"),
         "whatToDo": MessageLookupByLibrary.simpleMessage("What to do...")
       };
 }

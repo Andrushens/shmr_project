@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shmr/utils/failure.dart';
+import 'package:shmr/model/failure.dart';
 
 class Routes {
   static const String homePage = '/';

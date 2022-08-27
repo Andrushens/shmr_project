@@ -18,8 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeState {
   List<Task> get tasks => throw _privateConstructorUsedError;
   List<Task> get displayTasks => throw _privateConstructorUsedError;
+  ErrorType get errorType => throw _privateConstructorUsedError;
   int get completedAmount => throw _privateConstructorUsedError;
   bool get displayCompleted => throw _privateConstructorUsedError;
+  bool get shouldShowError => throw _privateConstructorUsedError;
+  int get errorsInRowAmount => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -33,8 +36,11 @@ abstract class $HomeStateCopyWith<$Res> {
   $Res call(
       {List<Task> tasks,
       List<Task> displayTasks,
+      ErrorType errorType,
       int completedAmount,
-      bool displayCompleted});
+      bool displayCompleted,
+      bool shouldShowError,
+      int errorsInRowAmount});
 }
 
 /// @nodoc
@@ -49,8 +55,11 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
   $Res call({
     Object? tasks = freezed,
     Object? displayTasks = freezed,
+    Object? errorType = freezed,
     Object? completedAmount = freezed,
     Object? displayCompleted = freezed,
+    Object? shouldShowError = freezed,
+    Object? errorsInRowAmount = freezed,
   }) {
     return _then(_value.copyWith(
       tasks: tasks == freezed
@@ -61,6 +70,10 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
           ? _value.displayTasks
           : displayTasks // ignore: cast_nullable_to_non_nullable
               as List<Task>,
+      errorType: errorType == freezed
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as ErrorType,
       completedAmount: completedAmount == freezed
           ? _value.completedAmount
           : completedAmount // ignore: cast_nullable_to_non_nullable
@@ -69,6 +82,14 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
           ? _value.displayCompleted
           : displayCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      shouldShowError: shouldShowError == freezed
+          ? _value.shouldShowError
+          : shouldShowError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorsInRowAmount: errorsInRowAmount == freezed
+          ? _value.errorsInRowAmount
+          : errorsInRowAmount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -82,8 +103,11 @@ abstract class _$$_HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
   $Res call(
       {List<Task> tasks,
       List<Task> displayTasks,
+      ErrorType errorType,
       int completedAmount,
-      bool displayCompleted});
+      bool displayCompleted,
+      bool shouldShowError,
+      int errorsInRowAmount});
 }
 
 /// @nodoc
@@ -100,8 +124,11 @@ class __$$_HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
   $Res call({
     Object? tasks = freezed,
     Object? displayTasks = freezed,
+    Object? errorType = freezed,
     Object? completedAmount = freezed,
     Object? displayCompleted = freezed,
+    Object? shouldShowError = freezed,
+    Object? errorsInRowAmount = freezed,
   }) {
     return _then(_$_HomeState(
       tasks: tasks == freezed
@@ -112,6 +139,10 @@ class __$$_HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value._displayTasks
           : displayTasks // ignore: cast_nullable_to_non_nullable
               as List<Task>,
+      errorType: errorType == freezed
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as ErrorType,
       completedAmount: completedAmount == freezed
           ? _value.completedAmount
           : completedAmount // ignore: cast_nullable_to_non_nullable
@@ -120,6 +151,14 @@ class __$$_HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value.displayCompleted
           : displayCompleted // ignore: cast_nullable_to_non_nullable
               as bool,
+      shouldShowError: shouldShowError == freezed
+          ? _value.shouldShowError
+          : shouldShowError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorsInRowAmount: errorsInRowAmount == freezed
+          ? _value.errorsInRowAmount
+          : errorsInRowAmount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -130,8 +169,11 @@ class _$_HomeState implements _HomeState {
   const _$_HomeState(
       {required final List<Task> tasks,
       required final List<Task> displayTasks,
-      required this.completedAmount,
-      required this.displayCompleted})
+      this.errorType = ErrorType.none,
+      this.completedAmount = 0,
+      this.displayCompleted = true,
+      this.shouldShowError = true,
+      this.errorsInRowAmount = 0})
       : _tasks = tasks,
         _displayTasks = displayTasks;
 
@@ -150,13 +192,24 @@ class _$_HomeState implements _HomeState {
   }
 
   @override
+  @JsonKey()
+  final ErrorType errorType;
+  @override
+  @JsonKey()
   final int completedAmount;
   @override
+  @JsonKey()
   final bool displayCompleted;
+  @override
+  @JsonKey()
+  final bool shouldShowError;
+  @override
+  @JsonKey()
+  final int errorsInRowAmount;
 
   @override
   String toString() {
-    return 'HomeState(tasks: $tasks, displayTasks: $displayTasks, completedAmount: $completedAmount, displayCompleted: $displayCompleted)';
+    return 'HomeState(tasks: $tasks, displayTasks: $displayTasks, errorType: $errorType, completedAmount: $completedAmount, displayCompleted: $displayCompleted, shouldShowError: $shouldShowError, errorsInRowAmount: $errorsInRowAmount)';
   }
 
   @override
@@ -167,10 +220,15 @@ class _$_HomeState implements _HomeState {
             const DeepCollectionEquality().equals(other._tasks, _tasks) &&
             const DeepCollectionEquality()
                 .equals(other._displayTasks, _displayTasks) &&
+            const DeepCollectionEquality().equals(other.errorType, errorType) &&
             const DeepCollectionEquality()
                 .equals(other.completedAmount, completedAmount) &&
             const DeepCollectionEquality()
-                .equals(other.displayCompleted, displayCompleted));
+                .equals(other.displayCompleted, displayCompleted) &&
+            const DeepCollectionEquality()
+                .equals(other.shouldShowError, shouldShowError) &&
+            const DeepCollectionEquality()
+                .equals(other.errorsInRowAmount, errorsInRowAmount));
   }
 
   @override
@@ -178,8 +236,11 @@ class _$_HomeState implements _HomeState {
       runtimeType,
       const DeepCollectionEquality().hash(_tasks),
       const DeepCollectionEquality().hash(_displayTasks),
+      const DeepCollectionEquality().hash(errorType),
       const DeepCollectionEquality().hash(completedAmount),
-      const DeepCollectionEquality().hash(displayCompleted));
+      const DeepCollectionEquality().hash(displayCompleted),
+      const DeepCollectionEquality().hash(shouldShowError),
+      const DeepCollectionEquality().hash(errorsInRowAmount));
 
   @JsonKey(ignore: true)
   @override
@@ -191,17 +252,26 @@ abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {required final List<Task> tasks,
       required final List<Task> displayTasks,
-      required final int completedAmount,
-      required final bool displayCompleted}) = _$_HomeState;
+      final ErrorType errorType,
+      final int completedAmount,
+      final bool displayCompleted,
+      final bool shouldShowError,
+      final int errorsInRowAmount}) = _$_HomeState;
 
   @override
   List<Task> get tasks;
   @override
   List<Task> get displayTasks;
   @override
+  ErrorType get errorType;
+  @override
   int get completedAmount;
   @override
   bool get displayCompleted;
+  @override
+  bool get shouldShowError;
+  @override
+  int get errorsInRowAmount;
   @override
   @JsonKey(ignore: true)
   _$$_HomeStateCopyWith<_$_HomeState> get copyWith =>
