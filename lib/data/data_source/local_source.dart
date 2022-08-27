@@ -1,12 +1,13 @@
+import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class LocalSource {
-  Future<List<Map<String, dynamic>>> fetchTasks();
-  Future<void> addTask(Map<String, dynamic> taskMap);
+  Future<List<Task>> fetchTasks();
+  Future<void> addTask(Task task);
   Future<void> deleteTask(String id);
-  Future<void> updateTask(String id, Map<String, dynamic> taskMap);
-  Future<void> addTasksList(List<Map<String, dynamic>> tasks);
+  Future<void> updateTask(Task task);
+  Future<void> addTasksList(List<Task> tasks);
 }
 
 class LocalSourceImpl implements LocalSource {
@@ -15,7 +16,7 @@ class LocalSourceImpl implements LocalSource {
   final Database database;
 
   @override
-  Future<List<Map<String, dynamic>>> fetchTasks() async {
+  Future<List<Task>> fetchTasks() async {
     final List<Map<String, dynamic>> maps = await database.query(
       ConstLocal.tasksTableName,
       orderBy: ConstLocal.createdAtField,
@@ -23,19 +24,19 @@ class LocalSourceImpl implements LocalSource {
     final result = maps.map((e) {
       final resMap = Map<String, dynamic>.from(e);
       resMap[ConstLocal.doneField] = e[ConstLocal.doneField] == 1;
-      return resMap;
+      return Task.fromJson(resMap);
     }).toList();
     return result;
   }
 
   @override
-  Future<void> addTask(Map<String, dynamic> taskMap) async {
-    final resMap = Map<String, dynamic>.from(taskMap);
-    resMap[ConstLocal.doneField] =
+  Future<void> addTask(Task task) async {
+    final taskMap = task.toJson();
+    taskMap[ConstLocal.doneField] =
         taskMap[ConstLocal.doneField] == true ? 1 : 0;
     await database.insert(
       ConstLocal.tasksTableName,
-      resMap,
+      taskMap,
     );
   }
 
@@ -49,28 +50,27 @@ class LocalSourceImpl implements LocalSource {
   }
 
   @override
-  Future<void> updateTask(String id, Map<String, dynamic> taskMap) async {
-    final resMap = Map<String, dynamic>.from(taskMap);
-    resMap[ConstLocal.doneField] =
+  Future<void> updateTask(Task task) async {
+    final taskMap = task.toJson();
+    taskMap[ConstLocal.doneField] =
         taskMap[ConstLocal.doneField] == true ? 1 : 0;
     await database.update(
       ConstLocal.tasksTableName,
-      resMap,
+      taskMap,
       where: '${ConstLocal.idField} = ?',
-      whereArgs: [id],
+      whereArgs: [task.id],
     );
   }
 
   @override
-  Future<void> addTasksList(List<Map<String, dynamic>> tasksMaps) async {
+  Future<void> addTasksList(List<Task> tasks) async {
     final batch = database.batch();
-    for (final taskMap in tasksMaps) {
-      final resMap = Map<String, dynamic>.from(taskMap);
-      resMap[ConstLocal.doneField] =
-          taskMap[ConstLocal.doneField] == true ? 1 : 0;
+    for (final task in tasks) {
+      final taskMap = task.toJson();
+      taskMap[ConstLocal.doneField] = task.done ? 1 : 0;
       batch.insert(
         ConstLocal.tasksTableName,
-        resMap,
+        taskMap,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }

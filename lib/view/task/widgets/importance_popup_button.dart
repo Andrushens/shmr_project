@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shmr/domain/model/importance.dart';
 import 'package:shmr/generated/l10n.dart';
-import 'package:shmr/model/importance.dart';
 import 'package:shmr/view/task/cubit/task_cubit.dart';
 
 class ImportancePopupButton extends StatelessWidget {

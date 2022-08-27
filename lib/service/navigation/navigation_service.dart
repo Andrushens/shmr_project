@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:shmr/model/task/task.dart';
+import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/view/home/home_page.dart';
 import 'package:shmr/view/task/task_page.dart';

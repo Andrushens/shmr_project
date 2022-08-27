@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shmr/core/setup_locator.dart';
-import 'package:shmr/data/repository/tasks_repository.dart';
-import 'package:shmr/model/error_type.dart';
-import 'package:shmr/model/failure.dart';
-import 'package:shmr/model/task/task.dart';
+import 'package:shmr/domain/model/error_type.dart';
+import 'package:shmr/domain/model/failure.dart';
+import 'package:shmr/domain/model/task/task.dart';
+import 'package:shmr/domain/repository/tasks_repository.dart';
 import 'package:shmr/service/navigation/constants.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:uuid/uuid.dart';
@@ -200,7 +200,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void _handleFailure(Failure failure) {
     final currentErrorsAmount = state.errorsInRowAmount + 1;
-    final shouldShowError = currentErrorsAmount % 3 == 1;
+    final shouldShowError = (currentErrorsAmount % 3) == 1;
     switch (failure.runtimeType) {
       case ServerFailure:
         emit(

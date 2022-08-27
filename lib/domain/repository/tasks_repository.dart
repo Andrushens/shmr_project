@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart' show Either, Left, Right;
 import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
-import 'package:shmr/model/failure.dart';
-import 'package:shmr/model/task/task.dart';
+import 'package:shmr/domain/model/failure.dart';
+import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/service/connecitivty_status_provider.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -28,10 +28,9 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Either<Failure, List<Task>>> fetchTasks() async {
     try {
-      final tasksMaps = await remoteSource.fetchTasks();
-      final tasks = tasksMaps.map(Task.fromJson).toList();
+      final tasks = await remoteSource.fetchTasks();
       try {
-        await localSource.addTasksList(tasksMaps);
+        await localSource.addTasksList(tasks);
       } catch (e) {
         logger.w('failed to save tasks local: $e');
       }
@@ -40,8 +39,7 @@ class TasksRepositoryImpl implements TasksRepository {
       logger.w('failed to fetch tasks remote');
     }
     try {
-      final tasksMaps = await localSource.fetchTasks();
-      final tasks = tasksMaps.map(Task.fromJson).toList();
+      final tasks = await localSource.fetchTasks();
       return Right(tasks);
     } catch (e) {
       logger.w('failed to fetch tasks local: $e');
@@ -52,8 +50,8 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Either<Failure, bool>> addTask(Task task) async {
     try {
-      await localSource.addTask(task.toJson());
-      await remoteSource.addTask(task.toJson());
+      await localSource.addTask(task);
+      await remoteSource.addTask(task);
       return const Right(true);
     } on ServerException catch (_) {
       logger.w('failed to add task remote');
@@ -96,8 +94,8 @@ class TasksRepositoryImpl implements TasksRepository {
   @override
   Future<Either<Failure, bool>> updateTask(Task task) async {
     try {
-      await localSource.updateTask(task.id, task.toJson());
-      await remoteSource.updateTask(task.id, task.toJson());
+      await localSource.updateTask(task);
+      await remoteSource.updateTask(task);
       return const Right(true);
     } on ServerException catch (_) {
       logger.w('failed to update task remote');

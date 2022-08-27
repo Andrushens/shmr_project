@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shmr/data/data_source/local_source.dart';
 import 'package:shmr/data/data_source/remote_source.dart';
-import 'package:shmr/data/repository/tasks_repository.dart';
+import 'package:shmr/domain/repository/tasks_repository.dart';
 import 'package:shmr/service/connecitivty_status_provider.dart';
 import 'package:shmr/service/local_database_service.dart';
 import 'package:shmr/service/navigation/navigation_service.dart';

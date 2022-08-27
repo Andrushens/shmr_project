@@ -1,14 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:shmr/model/failure.dart';
+import 'package:shmr/domain/model/failure.dart';
+import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/utils/logger_interceptor.dart';
 import 'package:shmr/utils/revision_interceptor.dart';
 
 abstract class RemoteSource {
-  Future<List<Map<String, dynamic>>> fetchTasks();
-  Future<void> addTask(Map<String, dynamic> taskMap);
+  Future<List<Task>> fetchTasks();
+  Future<void> addTask(Task task);
   Future<void> deleteTask(String id);
-  Future<void> updateTask(String id, Map<String, dynamic> taskMap);
+  Future<void> updateTask(Task task);
 }
 
 class RemoteSourceImpl implements RemoteSource {
@@ -29,14 +30,17 @@ class RemoteSourceImpl implements RemoteSource {
   late final Dio dio;
 
   @override
-  Future<List<Map<String, dynamic>>> fetchTasks() async {
+  Future<List<Task>> fetchTasks() async {
     final response = await dio.get<Map<String, dynamic>>(
       ConstRemote.fetchTasksPath,
     );
     final data = response.data;
     if (data != null && data[ConstRemote.statusField] == 'ok') {
       final jsonList = data[ConstRemote.listField] as List<dynamic>;
-      final resList = jsonList.map((e) => e as Map<String, dynamic>).toList();
+      final resList = jsonList
+          .map((e) => e as Map<String, dynamic>)
+          .map(Task.fromJson)
+          .toList();
       return resList;
     } else {
       throw const ServerException();
@@ -44,11 +48,11 @@ class RemoteSourceImpl implements RemoteSource {
   }
 
   @override
-  Future<void> addTask(Map<String, dynamic> taskMap) async {
+  Future<void> addTask(Task task) async {
     final response = await dio.post<Map<String, dynamic>>(
       ConstRemote.addTaskPath,
       data: {
-        ConstRemote.elementField: taskMap,
+        ConstRemote.elementField: task.toJson(),
       },
     );
     final data = response.data;
@@ -69,11 +73,11 @@ class RemoteSourceImpl implements RemoteSource {
   }
 
   @override
-  Future<void> updateTask(String id, Map<String, dynamic> taskMap) async {
+  Future<void> updateTask(Task task) async {
     final response = await dio.put<Map<String, dynamic>>(
-      ConstRemote.updateTaskPath(id),
+      ConstRemote.updateTaskPath(task.id),
       data: {
-        ConstRemote.elementField: taskMap,
+        ConstRemote.elementField: task.toJson(),
       },
     );
     final data = response.data;

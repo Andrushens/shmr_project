@@ -44,7 +44,7 @@ class ConstRemote {
   static const baseHeaders = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer Taixpool',
-    'X-Generate-Fails': 33,
+    // 'X-Generate-Fails': 33,
   };
 
   static const baseUrl = 'https://beta.mrdekk.ru/todobackend/';

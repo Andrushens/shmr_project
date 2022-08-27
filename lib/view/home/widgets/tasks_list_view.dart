@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shmr/model/task/task.dart';
+import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/task_tile.dart';
 
