@@ -13,14 +13,12 @@ class TaskTile extends StatelessWidget {
     required this.task,
     required this.onDoneUpdate,
     required this.onDelete,
-    required this.onUpdate,
     super.key,
   });
 
   final Task task;
   final Future<void> Function(String id, {required bool done}) onDoneUpdate;
   final Future<void> Function(String id) onDelete;
-  final Future<void> Function(Task task) onUpdate;
   final _navigationService = locator<NavigationService>();
 
   @override

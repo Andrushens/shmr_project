@@ -11,13 +11,18 @@ void main() {
     late Task mockTask;
     late List<Task> mockTasksUpdated;
     late bool mockDone;
+    late int mockTimestamp;
 
     setUp(() {
       mockDisplayCompleted = false;
       mockTask = mockTasks.last;
       mockDone = !mockTask.done;
       mockTasksUpdated = List<Task>.from(mockTasks);
-      mockTasksUpdated[1] = mockTasks[1].copyWith(done: mockDone);
+      mockTimestamp = DateTime.now().millisecondsSinceEpoch;
+      mockTasksUpdated[1] = mockTasks[1].copyWith(
+        done: mockDone,
+        changedAt: mockTimestamp,
+      );
       final mockTasksRepository = MockTasksRepositoryImpl();
       homeCubit = HomeCubit(tasksRepository: mockTasksRepository);
     });
@@ -92,21 +97,27 @@ void main() {
       build: () => homeCubit,
       act: (cubit) async {
         await cubit.initTasks();
-        await cubit.updateTaskDone(mockTask.id, done: mockDone);
+        await cubit.updateTaskDone(
+          mockTask.id,
+          done: mockDone,
+          timestamp: mockTimestamp,
+        );
       },
-      expect: () => [
-        HomeState(
-          tasks: mockTasks,
-          completedAmount: mockTasks.where((e) => e.done).length,
-          displayTasks: mockTasks,
-        ),
-        HomeState(
-          tasks: mockTasksUpdated,
-          displayTasks: mockTasksUpdated,
-          completedAmount: mockTasksUpdated.where((e) => e.done).length,
-          shouldShowError: false,
-        ),
-      ],
+      expect: () {
+        return [
+          HomeState(
+            tasks: mockTasks,
+            completedAmount: mockTasks.where((e) => e.done).length,
+            displayTasks: mockTasks,
+          ),
+          HomeState(
+            tasks: mockTasksUpdated,
+            displayTasks: mockTasksUpdated,
+            completedAmount: mockTasksUpdated.where((e) => e.done).length,
+            shouldShowError: false,
+          ),
+        ];
+      },
     );
 
     tearDown(() {

@@ -24,7 +24,6 @@ class TasksListView extends StatelessWidget {
           task: task,
           onDoneUpdate: context.read<HomeCubit>().updateTaskDone,
           onDelete: context.read<HomeCubit>().deleteTask,
-          onUpdate: context.read<HomeCubit>().updateTask,
         );
       },
     );

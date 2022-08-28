@@ -51,15 +51,15 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> createTask({Task? task, String? value}) async {
+  Future<void> createTask({Task? task, String? value, int? timestamp}) async {
     final id = const Uuid().v4();
-    final newTask = task ??
+    final newTask = task?.copyWith(createdAt: timestamp ?? task.createdAt) ??
         Task(
           id: id,
           text: value ?? id,
           importance: 'basic',
           done: false,
-          createdAt: DateTime.now().millisecondsSinceEpoch,
+          createdAt: timestamp ?? DateTime.now().millisecondsSinceEpoch,
           changedAt: 0,
           lastUpdatedBy: id,
         );
@@ -119,7 +119,9 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> updateTask(Task task) async {
+  Future<void> updateTask(Task updatedTask, {int? timestamp}) async {
+    final now = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+    final task = updatedTask.copyWith(changedAt: now);
     final indexToUpdate = state.tasks.indexWhere(
       (e) => e.id == task.id,
     );
@@ -168,10 +170,14 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> updateTaskDone(String id, {required bool done}) async {
+  Future<void> updateTaskDone(
+    String id, {
+    required bool done,
+    int? timestamp,
+  }) async {
     final task = state.tasks.firstWhere((e) => e.id == id);
     final updatedTask = task.copyWith(done: done);
-    await updateTask(updatedTask);
+    await updateTask(updatedTask, timestamp: timestamp);
   }
 
   Future<void> handleTaskPagePop(dynamic task) async {
