@@ -43,7 +43,8 @@ class TaskCubit extends Cubit<TaskState> {
         deadline: state.deadline,
         importance: stringFromImportance(state.importance),
         done: false,
-        createdAt: DateTime.now().millisecondsSinceEpoch,
+        createdAt:
+            (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000,
         changedAt: 0,
         lastUpdatedBy: '1',
       );
@@ -53,7 +54,8 @@ class TaskCubit extends Cubit<TaskState> {
 
   void updateTask(Task task) {
     final updatedTask = task.copyWith(
-      changedAt: DateTime.now().millisecondsSinceEpoch,
+      changedAt:
+          (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000,
     );
     completeEditing(task: updatedTask);
   }

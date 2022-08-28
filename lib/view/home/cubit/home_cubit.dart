@@ -59,7 +59,8 @@ class HomeCubit extends Cubit<HomeState> {
           text: value ?? id,
           importance: 'basic',
           done: false,
-          createdAt: DateTime.now().millisecondsSinceEpoch,
+          createdAt:
+              (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000,
           changedAt: 0,
           lastUpdatedBy: id,
         );
@@ -120,7 +121,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> updateTask(Task updatedTask) async {
-    final now = DateTime.now().microsecondsSinceEpoch;
+    final now = (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000;
     final task = updatedTask.copyWith(changedAt: now);
     final indexToUpdate = state.tasks.indexWhere(
       (e) => e.id == task.id,
