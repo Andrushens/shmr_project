@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/domain/model/importance.dart';
 import 'package:shmr/domain/model/task/task.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/date_formatter.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 
 class TaskTile extends StatelessWidget {
-  const TaskTile({
+  TaskTile({
     required this.task,
     required this.onDoneUpdate,
     required this.onDelete,
@@ -18,6 +21,7 @@ class TaskTile extends StatelessWidget {
   final Future<void> Function(String id, {required bool done}) onDoneUpdate;
   final Future<void> Function(String id) onDelete;
   final Future<void> Function(Task task) onUpdate;
+  final _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +88,14 @@ class TaskTile extends StatelessWidget {
             const SizedBox(width: 14),
             Expanded(
               child: GestureDetector(
-                onTap: () async {
-                  await context.read<HomeCubit>().navigateToTaskPage(task);
+                onTap: () {
+                  _navigationService
+                      .navigateTo(Routes.taskPage, data: task)
+                      .then(
+                    (updatedTask) {
+                      context.read<HomeCubit>().handleTaskPagePop(updatedTask);
+                    },
+                  );
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,8 +176,14 @@ class TaskTile extends StatelessWidget {
               height: 20,
               child: IconButton(
                 padding: EdgeInsetsDirectional.zero,
-                onPressed: () async {
-                  await context.read<HomeCubit>().navigateToTaskPage(task);
+                onPressed: () {
+                  _navigationService
+                      .navigateTo(Routes.taskPage, data: task)
+                      .then(
+                    (updatedTask) {
+                      context.read<HomeCubit>().handleTaskPagePop(updatedTask);
+                    },
+                  );
                 },
                 icon: Image.asset(
                   'assets/images/info_outline.png',

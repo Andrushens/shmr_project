@@ -1,12 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/domain/model/error_type.dart';
 import 'package:shmr/domain/model/failure.dart';
 import 'package:shmr/domain/model/task/task.dart';
-import 'package:shmr/domain/repository/tasks_repository.dart';
-import 'package:shmr/service/navigation/constants.dart';
-import 'package:shmr/service/navigation/navigation_service.dart';
+import 'package:shmr/domain/repository/tasks/tasks_repository.dart';
 import 'package:uuid/uuid.dart';
 
 part 'home_cubit.freezed.dart';
@@ -22,7 +19,6 @@ class HomeCubit extends Cubit<HomeState> {
         );
 
   final TasksRepository tasksRepository;
-  final navigationService = locator<NavigationService>();
 
   Future<void> initTasks() async {
     (await tasksRepository.fetchTasks()).fold(
@@ -178,15 +174,7 @@ class HomeCubit extends Cubit<HomeState> {
     await updateTask(updatedTask);
   }
 
-  Future<void> navigateToTaskPage([Task? task]) async {
-    final newTask = await navigationService.navigateTo(
-      Routes.taskPage,
-      data: task,
-    );
-    await _handleTaskPagePop(newTask);
-  }
-
-  Future<void> _handleTaskPagePop(dynamic task) async {
+  Future<void> handleTaskPagePop(dynamic task) async {
     if (task is Task) {
       if (task.isDeleted) {
         return deleteTask(task.id);

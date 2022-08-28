@@ -30,11 +30,11 @@ class TaskCubit extends Cubit<TaskState> {
     if (task is Task) {
       updateTask(task);
     } else {
-      addTask();
+      createTask();
     }
   }
 
-  void addTask() {
+  void createTask() {
     if (state.text.isNotEmpty) {
       final id = const Uuid().v4();
       final newTask = Task(

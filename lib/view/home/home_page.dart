@@ -4,6 +4,8 @@ import 'package:shake/shake.dart';
 import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/domain/model/error_type.dart';
 import 'package:shmr/generated/l10n.dart';
+import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_flexible_space.dart';
 import 'package:shmr/view/home/widgets/home_task_text_field.dart';
@@ -19,11 +21,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final TextEditingController _taskTextController;
+  late final NavigationService _navigationService;
 
   @override
   void initState() {
     super.initState();
     _taskTextController = TextEditingController();
+    _navigationService = locator<NavigationService>();
     ShakeDetector.autoStart(
       onPhoneShake: () async {
         await context.read<ThemeCubit>().changeTheme();
@@ -146,8 +150,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                await context.read<HomeCubit>().navigateToTaskPage();
+              onPressed: () {
+                _navigationService.navigateTo(Routes.taskPage).then(
+                  (task) {
+                    context.read<HomeCubit>().handleTaskPagePop(task);
+                  },
+                );
               },
               child: Image.asset(
                 'assets/images/add.png',

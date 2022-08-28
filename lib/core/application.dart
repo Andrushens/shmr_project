@@ -7,6 +7,7 @@ import 'package:shmr/core/setup_locator.dart';
 import 'package:shmr/generated/l10n.dart';
 import 'package:shmr/service/navigation/awesome_router_delegate.dart';
 import 'package:shmr/service/navigation/constants.dart';
+import 'package:shmr/service/navigation/navigation_service.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:shmr/view/home/cubit/home_cubit.dart';
 import 'package:shmr/view/home/widgets/custom_scroll_behavior.dart';
@@ -27,12 +28,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late final StreamSubscription<String?>? _streamSubscription;
+  late final NavigationService _navigationService;
   late final HomeCubit _homeCubit;
 
   @override
   void initState() {
     super.initState();
     _homeCubit = locator<HomeCubit>();
+    _navigationService = locator<NavigationService>();
     handleInitialDeepLink();
     handleIncomingLinks();
   }
@@ -48,7 +51,8 @@ class _MyAppState extends State<MyApp> {
     if (link != null) {
       logger.i('Got initial link: $link');
       if (taskPageRegExp.hasMatch(link)) {
-        await _homeCubit.navigateToTaskPage();
+        final task = await _navigationService.navigateTo(Routes.taskPage);
+        await _homeCubit.handleTaskPagePop(task);
       }
     }
   }
@@ -58,7 +62,8 @@ class _MyAppState extends State<MyApp> {
       (link) async {
         logger.i('Got incoming link: $link');
         if (mounted && link != null && taskPageRegExp.hasMatch(link)) {
-          await _homeCubit.navigateToTaskPage();
+          final task = await _navigationService.navigateTo(Routes.taskPage);
+          await _homeCubit.handleTaskPagePop(task);
         }
       },
     );

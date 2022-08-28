@@ -7,7 +7,7 @@ import 'package:shmr/data/remote/interceptors/logger_interceptor.dart';
 import 'package:shmr/data/remote/interceptors/patch_interceptor.dart';
 import 'package:shmr/data/remote/interceptors/revision_interceptor.dart';
 import 'package:shmr/data/remote/remote_source.dart';
-import 'package:shmr/domain/repository/tasks_repository.dart';
+import 'package:shmr/domain/repository/tasks/tasks_repository.dart';
 import 'package:shmr/service/analytics_provider.dart';
 import 'package:shmr/service/connecitivty_status_provider.dart';
 import 'package:shmr/service/local_database_service.dart';
