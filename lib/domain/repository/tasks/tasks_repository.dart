@@ -5,6 +5,7 @@ import 'package:shmr/domain/model/failure.dart';
 import 'package:shmr/domain/model/task/task.dart';
 import 'package:shmr/service/analytics_provider.dart';
 import 'package:shmr/service/connecitivty_status_provider.dart';
+import 'package:shmr/service/shared_provider.dart';
 import 'package:shmr/utils/const.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -32,12 +33,26 @@ class TasksRepositoryImpl implements TasksRepository {
   Future<Either<Failure, List<Task>>> fetchTasks() async {
     try {
       final backendTasks = await remoteSource.fetchTasks();
-      try {
-        await localSource.saveTasks(backendTasks);
-      } catch (e) {
-        logger.w('failed to save tasks local: $e');
+      final dbTasks = await localSource.fetchTasks();
+      if (dbTasks.isEmpty && backendTasks.isNotEmpty) {
+        try {
+          await localSource.saveTasks(backendTasks);
+        } catch (e) {
+          logger.w('failed to save tasks local: $e');
+        }
       }
-      return Right(backendTasks);
+      final resTasks = mergeTasksLists(
+        backendTasks: backendTasks,
+        dbTasks: dbTasks,
+      );
+
+      final localRevision = SharedProvider.getLocalRevision();
+      final remoteRevision = SharedProvider.getRemoteRevision();
+      if (localRevision > remoteRevision) {
+        await remoteSource.patchTasks(resTasks);
+      }
+
+      return Right(resTasks);
     } catch (_) {
       logger.w('failed to fetch tasks remote');
     }
@@ -153,5 +168,31 @@ class TasksRepositoryImpl implements TasksRepository {
       );
       return Left(ServerFailure());
     }
+  }
+
+  List<Task> mergeTasksLists({
+    required List<Task> backendTasks,
+    required List<Task> dbTasks,
+  }) {
+    final resTasks = <Task>[];
+    for (final dbTask in dbTasks) {
+      final backendTaskIndex = backendTasks.indexWhere(
+        (e) => e.id == dbTask.id,
+      );
+      if (backendTaskIndex == -1 ||
+          dbTask.changedAt > backendTasks[backendTaskIndex].changedAt) {
+        resTasks.add(dbTask);
+      } else {
+        resTasks.add(backendTasks[backendTaskIndex]);
+      }
+    }
+    if (dbTasks.isEmpty) {
+      for (final backendTask in backendTasks) {
+        if (dbTasks.indexWhere((e) => e.id == backendTask.id) == -1) {
+          resTasks.add(backendTask);
+        }
+      }
+    }
+    return resTasks;
   }
 }
