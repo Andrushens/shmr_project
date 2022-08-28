@@ -119,7 +119,9 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  Future<void> updateTask(Task task) async {
+  Future<void> updateTask(Task updatedTask) async {
+    final now = DateTime.now().microsecondsSinceEpoch;
+    final task = updatedTask.copyWith(changedAt: now);
     final indexToUpdate = state.tasks.indexWhere(
       (e) => e.id == task.id,
     );
