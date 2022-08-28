@@ -21,30 +21,28 @@ class TaskCubit extends Cubit<TaskState> {
           ),
         );
 
-  void saveTask() {
+  void saveTask({int? timestamp, String? id}) {
     final task = state.task?.copyWith(
       text: state.text,
       importance: stringFromImportance(state.importance),
       deadline: state.deadline,
     );
     if (task is Task) {
-      updateTask(task);
+      updateTask(task, timestamp: timestamp);
     } else {
-      createTask();
+      createTask(timestamp: timestamp, id: id);
     }
   }
 
-  void createTask() {
+  void createTask({int? timestamp, String? id}) {
     if (state.text.isNotEmpty) {
-      final id = const Uuid().v4();
       final newTask = Task(
-        id: id,
+        id: id ?? const Uuid().v4(),
         text: state.text,
         deadline: state.deadline,
         importance: stringFromImportance(state.importance),
         done: false,
-        createdAt:
-            (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000,
+        createdAt: timestamp ?? DateTime.now().millisecondsSinceEpoch,
         changedAt: 0,
         lastUpdatedBy: '1',
       );
@@ -52,10 +50,9 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
-  void updateTask(Task task) {
+  void updateTask(Task task, {int? timestamp}) {
     final updatedTask = task.copyWith(
-      changedAt:
-          (DateTime.now().millisecondsSinceEpoch / 10000).round() * 10000,
+      changedAt: timestamp ?? DateTime.now().millisecondsSinceEpoch,
     );
     completeEditing(task: updatedTask);
   }
