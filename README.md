@@ -2,7 +2,7 @@
 
 ## Apk (dev & prod flavors) download [link](https://drive.google.com/drive/u/0/folders/1K3El0Ym7FXpFw6Rj-clYfzQn7zhFdvjd)
 
-## Look-throw video [link](https://drive.google.com/drive/u/0/folders/1K3El0Ym7FXpFw6Rj-clYfzQn7zhFdvjd)
+## Look-throw video with offline-first functionality [link](https://drive.google.com/drive/u/0/folders/1K3El0Ym7FXpFw6Rj-clYfzQn7zhFdvjd)
 
 ## Firebase console - [link](https://console.firebase.google.com/u/1/project/shmr-9beb9)
 
