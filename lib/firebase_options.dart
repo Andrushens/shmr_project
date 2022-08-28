@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '931574122451',
     projectId: 'shmr-9beb9',
     storageBucket: 'shmr-9beb9.appspot.com',
-    iosClientId: '931574122451-ctrcecnuue3v62e55mthe5kojekrjrbg.apps.googleusercontent.com',
+    iosClientId:
+        '931574122451-ctrcecnuue3v62e55mthe5kojekrjrbg.apps.googleusercontent.com',
     iosBundleId: 'com.example.shmr',
   );
 }

@@ -15,13 +15,17 @@ class LoggingInterceptor implements InterceptorsWrapper {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final formattedHeader = encoder.convert(options.headers);
     final formattedBody = encoder.convert(options.data);
+    final headersString = formattedHeader.length > maxLength
+        ? 'HUGE OUTPUT(${formattedHeader.length} symbols)'
+        : formattedHeader;
+    final bodyString = formattedBody.length > maxLength
+        ? 'HUGE OUTPUT(${formattedBody.length} symbols)'
+        : formattedBody;
     logger.d(
       '**** API Request Start****\n\n'
       '${options.method} ${options.uri}\n'
-      'Headers: ${formattedHeader.length > maxLength ? 
-      'HUGE OUTPUT(${formattedHeader.length} symbols)' : formattedHeader}\n'
-      'Body: ${formattedBody.length > maxLength ? 
-      'HUGE OUTPUT(${formattedBody.length} symbols)' : formattedBody}\n\n'
+      'Headers: $headersString\n'
+      'Body: $bodyString\n\n'
       '**** API Request End****',
     );
     handler.next(options);
@@ -45,12 +49,14 @@ class LoggingInterceptor implements InterceptorsWrapper {
     ResponseInterceptorHandler handler,
   ) {
     final formattedData = encoder.convert(response.data);
+    final dataString = formattedData.length > maxLength
+        ? 'HUGE OUTPUT(${formattedData.length} symbols)'
+        : formattedData;
     logger.i(
       '**** API Response Start ****\n\n'
       '${response.requestOptions.method} ${response.requestOptions.uri}\n'
       'Status code: ${response.statusCode}\n'
-      'Data: ${formattedData.length > maxLength ? 
-      'HUGE OUTPUT(${formattedData.length} symbols)' : formattedData}\n\n'
+      'Data: $dataString\n\n'
       '**** API Response End****',
     );
     handler.next(response);
